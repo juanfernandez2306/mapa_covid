@@ -1,0 +1,94 @@
+@font-face {
+    font-family: Nunito;
+    src: url(../../complementos/font/Nunito/Nunito-Bold.ttf);
+}
+
+:root{
+    --altura-encabezado: 4rem;
+    --primer-color: #241394;
+    --segundo-color: #FFF3A6;
+    --tercer-color: #AAA2E4;
+    --cuarto-color: #948522;
+    --font-header: Nunito, Arial, Helvetica, sans-serif;
+}
+body{
+    font-size: 16px;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background-color: whitesmoke;
+}
+
+header{
+    height: var(--altura-encabezado);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primer-color);
+}
+
+header div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+header div a{
+    color: var(--segundo-color);
+    padding-left: .5rem;
+    font-size: 1.2rem;
+    text-decoration: none;
+    font-family: var(--font-header);
+    font-weight: 700;
+}
+
+header div svg{
+    width: 2rem;
+    height: 2rem;
+}
+
+#coronavirus path{
+    fill: var(--segundo-color);
+}
+
+#map{
+    height: calc(100vh - var(--altura-encabezado));
+}
+
+@media screen and (min-width: 900px){
+    body{
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media screen and (min-width: 400px) and (max-width:900px){
+    header div{
+        width: 90%;
+    }
+    
+    header div a{
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 400px){
+    :root{
+        --altura-encabezado: 6rem;
+    }
+
+    header div{
+        width: 80%;
+    }
+
+    header div a{
+        text-align: center;
+    }
+
+    header div svg{
+        width: 7rem;
+        height: 7rem;
+    }
+}
