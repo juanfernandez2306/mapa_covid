@@ -198,6 +198,41 @@ div.texto_temporal h3{
     margin-left: .5rem;
 }
 
+.contenedor_leyenda{
+    background-color: #f4f4f4;
+    padding: .2rem;
+    border-radius: .5rem;
+}
+
+.contenedor_leyenda h2{
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: var(--primer-color);
+}
+
+.contenedor_simbolos{
+    float: left;
+    margin-left: 50px;
+}
+
+.leyenda_circulo{
+    border-radius: 50%;
+    border: 1px solid var(--primer-color);
+    background-color: var(--primer-color);
+    opacity: .4;
+    display: inline-block;
+}
+
+.titulo_leyenda{
+    position: absolute;
+    right: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--primer-color);
+    font-weight: bold;
+}
+
 @media screen and (min-width: 900px){
     body{
         max-width: 1200px;

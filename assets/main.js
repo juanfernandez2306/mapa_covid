@@ -81,6 +81,60 @@ function cargar_control_seleccion(){
     return control;
 }
 
+function calcular_radio_proporcional(valor_atributo){
+    const factor_escala = 16 * 5;
+
+    var area_circulo = valor_atributo * factor_escala;
+
+    return Math.sqrt(area_circulo/Math.PI)*2;
+}
+
+function redondear_numero(valor_atributo){
+    return Math.round(valor_atributo)
+};
+
+function crear_leyenda(Valor_minimo, valor_maximo){
+    var leyenda = L.control({position: 'bottomright'});
+
+    leyenda.onAdd = function(){
+        var contenedor_leyenda = L.DomUtil.create('div', 'contenedor_leyenda'),
+            contenedor_simbolos = L.DomUtil.create('div', 'contenedor_simbolos');
+            promedio = (Valor_minimo + valor_maximo) / 2;
+            clases = [Valor_minimo, redondear_numero(promedio), valor_maximo],
+            ultimo_radio = 0,
+            radio_actual = 0,
+            margin = 0;
+
+        L.DomEvent.addListener(contenedor_leyenda, 'mousedown', function(e){
+            L.DomEvent.stopPropagation(e);
+        })
+        
+        contenedor_leyenda.innerHTML = '<h2># de Casos Confirmados</h2>';
+        clases.forEach((value)=>{
+            var leyenda_circulo = L.DomUtil.create('div', 'leyenda_circulo');
+            radio_actual = calcular_radio_proporcional(value);
+            margin = - radio_actual - ultimo_radio - 2;
+            leyenda_circulo.style['width'] = (radio_actual * 2)/16 + "rem";
+            leyenda_circulo.style['height'] = (radio_actual * 2)/16 + "rem";
+            leyenda_circulo.style['margin-left'] = (margin/16) + "rem";
+
+            var span = document.createElement('span');
+            span.classList.add('titulo_leyenda');
+            var texto_nodo = document.createTextNode(value);
+            span.appendChild(texto_nodo);
+            leyenda_circulo.appendChild(span);
+            contenedor_simbolos.appendChild(leyenda_circulo);
+            ultimo_radio = radio_actual;
+        });
+
+        contenedor_leyenda.appendChild(contenedor_simbolos);
+
+        return contenedor_leyenda;
+    }
+
+    return leyenda;
+}
+
 function cargar_mapa(){
     const coordenadas_iniciales = [10.90847, -72.08446];
     const zoom_inicial = 7;
@@ -94,12 +148,18 @@ function cargar_mapa(){
 
     L.control.scale({imperial: false}).addTo(map);
 
+    /*
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
 		minZoom: 7,
 		maxZoom: 19,
 		type:'osm'
 	}).addTo(map);
+    */
+
+    var leyenda = crear_leyenda(1, 10);
+
+    leyenda.addTo(map);
 
     var control_rango = null,
         control_select = null;
