@@ -1,6 +1,11 @@
 @font-face {
     font-family: Nunito;
-    src: url(../../complementos/font/Nunito/Nunito-Bold.ttf);
+    src: url(../../complementos/font/Nunito/Nunito-Regular.ttf);
+}
+
+@font-face{
+    font-family: roboto;
+    src: url(../../complementos/font/roboto/RobotoCondensed-Bold.ttf);
 }
 
 :root{
@@ -9,7 +14,8 @@
     --segundo-color: #FFF3A6;
     --tercer-color: #AAA2E4;
     --cuarto-color: #948522;
-    --font-header: Nunito, Arial, Helvetica, sans-serif;
+    --font-header: roboto, Arial, Helvetica, sans-serif;
+    --font-body: Nunito, Arial, Helvetica, sans-serif;
 }
 body{
     font-size: 16px;
@@ -56,11 +62,151 @@ header div svg{
     height: calc(100vh - var(--altura-encabezado));
 }
 
+/**/
+input[type=range]{
+    height: 25px;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 10px 0;
+    background: transparent;
+  }
+  input[type=range]:focus {
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px #000000;
+    background: var(--primer-color);
+    border-radius: 5px;
+    border: 0px solid #000000;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    box-shadow: 0px 0px 0px #000000;
+    border: 3px solid var(--primer-color);
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 25px;
+    background: var(--segundo-color);
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+  }
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: var(--primer-color);
+  }
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px #000000;
+    background: var(--primer-color);
+    border-radius: 1px;
+    border: 0px solid #000000;
+  }
+  input[type=range]::-moz-range-thumb {
+    box-shadow: 0px 0px 0px #000000;
+    border: 3px solid var(--primer-color);
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 25px;
+    background: var(--segundo-color);
+    cursor: pointer;
+  }
+  input[type=range]::-ms-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  input[type=range]::-ms-fill-lower {
+    background: var(--primer-color);
+    border: 0px solid #000000;
+    border-radius: 2px;
+    box-shadow: 0px 0px 0px #000000;
+  }
+  input[type=range]::-ms-fill-upper {
+    background: var(--primer-color);
+    border: 0px solid #000000;
+    border-radius: 2px;
+    box-shadow: 0px 0px 0px #000000;
+  }
+  input[type=range]::-ms-thumb {
+    margin-top: 1px;
+    box-shadow: 0px 0px 0px #000000;
+    border: 3px solid var(--primer-color);
+    height: 18px;
+    width: 18px;
+    border-radius: 25px;
+    background: var(--segundo-color);
+    cursor: pointer;
+  }
+  input[type=range]:focus::-ms-fill-lower {
+    background: var(--primer-color);
+  }
+  input[type=range]:focus::-ms-fill-upper {
+    background: var(--primer-color);
+  }
+  
+/**/
+
+div.texto_temporal{
+    width: 10rem;
+    height: 2rem;
+    background-color: var(--primer-color);
+    color: var(--segundo-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: .4rem;
+}
+
+.input_group svg,
+div.texto_temporal svg{
+    height: 1.2rem;
+    width: 1.2rem;
+}
+
+div.texto_temporal h3{
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+#calendario g path{
+    fill: var(--segundo-color);
+}
+
+.input_group{
+    background-color: var(--primer-color);
+    padding: .3rem;
+    border-radius: .3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.input_group select{
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: normal;
+    width: 10rem;
+    margin-left: .5rem;
+}
+
 @media screen and (min-width: 900px){
     body{
         max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    input.control_tiempo{
+        width: 30rem;
     }
 }
 
@@ -71,6 +217,10 @@ header div svg{
     
     header div a{
         text-align: center;
+    }
+
+    input.control_tiempo{
+        width: 20rem;
     }
 }
 
@@ -91,4 +241,9 @@ header div svg{
         width: 7rem;
         height: 7rem;
     }
+
+    input.control_tiempo{
+        width: 10rem;
+    }
+
 }
