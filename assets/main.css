@@ -233,6 +233,51 @@ div.texto_temporal h3{
     font-weight: bold;
 }
 
+.btn-group-vertical{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn_custom{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0;
+    background: var(--primer-color);
+    border: 1px solid var(--primer-color);
+}
+
+.btn_custom:hover{
+    background-color: var(--tercer-color);
+}
+
+.btn_custom:first-child{
+    border-radius: .3rem .3rem 0 0;
+}
+
+.btn_custom:last-child{
+    border-radius: 0 0 .3rem .3rem;
+}
+
+.btn_custom svg{
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+symbol path,
+symbol g path,
+symbol g g path,
+symbol g rect,
+symbol g polygon{
+    fill: var(--segundo-color);
+}
+
+.btn_custom:hover svg{
+    fill: var(--primer-color);
+}
+
 @media screen and (min-width: 900px){
     body{
         max-width: 1200px;
@@ -279,6 +324,19 @@ div.texto_temporal h3{
 
     input.control_tiempo{
         width: 10rem;
+    }
+
+    .contenedor_leyenda h2{
+        font-size: .8rem;
+    }
+
+    .titulo_leyenda{
+        font-size: .7rem;
+    }
+
+    .btn_custom{
+        width: 2.5rem;
+        height: 2.5rem;
     }
 
 }

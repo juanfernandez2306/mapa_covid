@@ -148,14 +148,12 @@ function cargar_mapa(){
 
     L.control.scale({imperial: false}).addTo(map);
 
-    /*
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
 		minZoom: 7,
 		maxZoom: 19,
 		type:'osm'
 	}).addTo(map);
-    */
 
     var leyenda = crear_leyenda(1, 10);
 
@@ -164,7 +162,7 @@ function cargar_mapa(){
     var control_rango = null,
         control_select = null;
 
-    const media_query = "(max-width: 400px)";
+    const media_query = "(max-width: 600px)";
 
     if(window.matchMedia(media_query).matches){
 
@@ -179,18 +177,70 @@ function cargar_mapa(){
         div_texto.addTo(map);
     }
 
+    var control_vertical = L.control.custom({
+        position: 'topright',
+        content : `
+            <button data-btn="zoom_init" class="btn_custom" id="zoom_init">
+                <svg data-btn="zoom_init">
+                    <use data-btn="zoom_init"xlink:href="#home"/>
+                </svg>
+            </buton>
+            <button id="graficas" data-btn="graficas" class="btn_custom">
+                <svg data-btn="graficas">
+                    <use data-btn="graficas" xlink:href="#bar_chart"/>
+                </svg>
+            </buton>
+            <button id="resumen" data-btn="resumen" class="btn_custom">
+                <svg data-btn="resumen">
+                    <use data-btn="resumen" xlink:href="#nasal_covid"/>
+                </svg>
+            </buton>
+            <button id="informacion" data-btn="informacion" class="btn_custom">
+                <svg data-btn="informacion">
+                    <use data-btn="informacion" xlink:href="#info"/>
+                </svg>
+            </buton>
+        `,
+        classes : 'btn-group-vertical btn-group-sm',
+        style   :
+        {
+            margin: '1rem',
+            padding: '0px 0 0 0',
+            cursor: 'pointer',
+        },
+        events:
+        {
+            click: function(data)
+            {
+                var dataset = data.target.dataset.btn,
+                    btn = seleccionarElemento('#' + dataset);
+
+                btn.disabled = true;
+
+                setTimeout(()=>{
+                    btn.removeAttribute('disabled');
+                }, 2000);
+                
+            }
+        }
+    });
+
+    control_vertical.addTo(map);
+
     window.addEventListener('resize', function(){
         if(window.matchMedia(media_query).matches){
 
             if(control_rango != null){
                 map.removeControl(div_texto);
                 map.removeControl(control_rango);
+                map.removeControl(control_vertical);
                 control_rango = null;
             }
 
             if(control_select == null){
                 control_select = cargar_control_seleccion();
                 control_select.addTo(map);
+                control_vertical.addTo(map);
             }
 
         }else{
