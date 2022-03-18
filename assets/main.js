@@ -1,61 +1,32 @@
-const seleccionarElemento = (element) => document.querySelector(element);
-const meses = ['Marzo', 'Abril', 'Mayo', 'Junio',
+const selectElement = (element) => document.querySelector(element);
+
+const selectVariableCSS = (element) => getComputedStyle(document.body).getPropertyValue(element);
+
+/**
+ * list name month in spanish
+ * @constant
+ * @type {array}
+ * @default
+ */
+const array_month = ['Marzo', 'Abril', 'Mayo', 'Junio',
                 'Julio', 'Agosto', 'Septiembre', 'Octubre',
                 'Noviembre', 'Diciembre'];
 
-function obtener_mes(numero){
-
-    return meses[numero - 1];
-}
-
-function cargar_texto_input(texto_entrada){
-    var texto_temporal = L.control({position: 'bottomleft'});
-
-    texto_temporal.onAdd = function(){
-        var div_texto = L.DomUtil.create('div', 'texto_temporal');
-        div_texto.innerHTML = `<svg><use xlink:href="#calendario"/></svg>
-            <h3 id="texto_temporal">${texto_entrada}</h3>`;
-
-        return div_texto;
-    }
-
-    return texto_temporal;
-}
-
-function cargar_control_deslizante(){
-    var control = L.control({position: 'bottomleft'});
-
-    control.onAdd = function(){
-        var input_control = L.DomUtil.create('input', 'control_tiempo');
-
-        L.DomEvent.addListener(input_control, 'mousedown', function(e){
-            L.DomEvent.stopPropagation(e);
-        })
-
-        input_control.type = 'range';
-        input_control.min = 1
-        input_control.max = 10;
-        input_control.step = 1;
-        input_control.value = 1;
-
-        input_control.addEventListener('change', (e) =>{
-            var value = e.target.value,
-                mes = obtener_mes(value);
-                seleccionarElemento('#texto_temporal').innerHTML = mes;
-        }, false);
-
-        return input_control;
-
-    }
-
-    return control;
-}
-
-function cargar_control_seleccion(){
+/**
+ * create control select in leaflet
+ * @param {object} map - instance L.map of leaflet
+ * @param {object} layer - instance L.geoJson of leaflet
+ * @returns {object} - object div html
+ */
+function create_control_select(map, layer){
     var control = L.control({position: 'topright'});
 
     control.onAdd = function(){
         var input_group = L.DomUtil.create('div', 'input_group');
+
+        L.DomEvent.addListener(input_group, 'mousedown', function(e){
+            L.DomEvent.stopPropagation(e);
+        })
 
         input_group.innerHTML = `
         <svg><use xlink:href="#calendario"/></svg>
@@ -64,16 +35,20 @@ function cargar_control_seleccion(){
 
         var select = input_group.querySelector('select');
 
-        meses.forEach((element, index, array) => {
+        array_month.forEach((element, index, array) => {
             var option = document.createElement('option');
-            option.value = index + 1;
+            option.value = index + 3;
             option.text = element;
             select.appendChild(option);
         });
 
-        L.DomEvent.addListener(select, 'mousedown', function(e){
-            L.DomEvent.stopPropagation(e);
-        })
+        select.addEventListener('change', (e) =>{
+            let element = e.target;
+            let value = element.value;
+            element.disabled = true;
+            console.log(value);
+
+        }, false);
 
         return input_group;
     }
@@ -81,69 +56,158 @@ function cargar_control_seleccion(){
     return control;
 }
 
-function calcular_radio_proporcional(valor_atributo){
-    const factor_escala = 16 * 5;
+/**
+ * calculate area circle
+ * @param {number} value_attribute_quantitative - attribute numeric of total
+ * @returns {number}
+*/
+function calculate_proportional_radius(value_attribute_quantitative){
+    const scale_factor = 16;
 
-    var area_circulo = valor_atributo * factor_escala;
+    var circle_area = value_attribute_quantitative * scale_factor;
 
-    return Math.sqrt(area_circulo/Math.PI)*2;
+    return Math.sqrt(circle_area/Math.PI)*2;
 }
 
-function redondear_numero(valor_atributo){
-    return Math.round(valor_atributo)
+/**
+ * calculate round number
+ * @param {number} number 
+ * @returns {number}
+ */
+function round_number(number){
+    return Math.round(number)
 };
 
-function crear_leyenda(Valor_minimo, valor_maximo){
-    var leyenda = L.control({position: 'bottomright'});
+/**
+ * create legend html in leaflet
+ * @param {number} value_min 
+ * @param {number} value_max 
+ * @returns {object} - object L.control leaflet
+ */
 
-    leyenda.onAdd = function(){
-        var contenedor_leyenda = L.DomUtil.create('div', 'contenedor_leyenda'),
-            contenedor_simbolos = L.DomUtil.create('div', 'contenedor_simbolos');
-            promedio = (Valor_minimo + valor_maximo) / 2;
-            clases = [Valor_minimo, redondear_numero(promedio), valor_maximo],
-            ultimo_radio = 0,
-            radio_actual = 0,
+function create_legend(value_min, value_max){
+    var legend = L.control({position: 'bottomright'});
+
+    var scale_factor = 1;
+
+    if(value_max < 6){
+        scale_factor = 4;
+    }else if(value_max >= 6 && value_max < 15){
+        scale_factor = 2.5;
+    }else{
+        scale_factor = 1.7;
+    }
+
+    legend.onAdd = function(){
+        var legend_container = L.DomUtil.create('div', 'legend_container'),
+            symbols_container = L.DomUtil.create('div', 'symbols_container');
+            average = (value_min + value_max) / 2;
+            class_value = [value_min, round_number(average), value_max],
+            last_radius = 0,
+            current_radius = 0,
             margin = 0;
 
-        L.DomEvent.addListener(contenedor_leyenda, 'mousedown', function(e){
+        L.DomEvent.addListener(legend_container, 'mousedown', function(e){
             L.DomEvent.stopPropagation(e);
         })
         
-        contenedor_leyenda.innerHTML = '<h2># de Casos Confirmados</h2>';
-        clases.forEach((value)=>{
-            var leyenda_circulo = L.DomUtil.create('div', 'leyenda_circulo');
-            radio_actual = calcular_radio_proporcional(value);
-            margin = - radio_actual - ultimo_radio - 2;
-            leyenda_circulo.style['width'] = (radio_actual * 2)/16 + "rem";
-            leyenda_circulo.style['height'] = (radio_actual * 2)/16 + "rem";
-            leyenda_circulo.style['margin-left'] = (margin/16) + "rem";
+        legend_container.innerHTML = '<h2># de Casos Confirmados</h2>';
+        
+        class_value.forEach((value) => {
+            var legend_circle = L.DomUtil.create('div', 'legend_circle');
+            current_radius = calculate_proportional_radius(value) * scale_factor;
+            margin = - current_radius - last_radius - 2;
+            legend_circle.style['width'] = (current_radius * 2)/16 + "rem";
+            legend_circle.style['height'] = (current_radius * 2)/16 + "rem";
+            legend_circle.style['margin-left'] = (margin/16) + "rem";
 
-            var span = document.createElement('span');
-            span.classList.add('titulo_leyenda');
-            var texto_nodo = document.createTextNode(value);
-            span.appendChild(texto_nodo);
-            leyenda_circulo.appendChild(span);
-            contenedor_simbolos.appendChild(leyenda_circulo);
-            ultimo_radio = radio_actual;
+            if(last_radius != current_radius){
+                var span = document.createElement('span');
+                span.classList.add('legend_title');
+                var text_node = document.createTextNode(value);
+                span.appendChild(text_node);
+                legend_circle.appendChild(span);
+                symbols_container.appendChild(legend_circle);
+            }else{
+                legend_circle.style['display'] = 'none';
+            }
+
+            last_radius = current_radius;
         });
 
-        contenedor_leyenda.appendChild(contenedor_simbolos);
+        legend_container.appendChild(symbols_container);
+        
 
-        return contenedor_leyenda;
+        return legend_container;
     }
 
-    return leyenda;
+    return legend;
 }
 
-function cargar_mapa(){
-    const coordenadas_iniciales = [10.90847, -72.08446];
-    const zoom_inicial = 7;
+/**
+ * create layer circle
+ * @param {object} geojson 
+ * @param {object} map - instance L.map leaflet
+ * @returns {object} layer_geojson - instance L.geoJson leaflet
+ */
+function create_layer_circle(geojson, map){
+    let layer_geojson =  L.geoJson(geojson, {
+        pointToLayer: function(feature, latlng){
+            return L.circleMarker(latlng, {
+                fillColor: selectVariableCSS('--primer-color'),
+                color: selectVariableCSS('--primer-color'),
+                weight: 1,
+                fillOpacity: .6
+            });
+        },
+        onEachFeature: function(feature, layer){
+            layer.on({
+                click: function(e){
+                    var center = e.target._latlng;
+                    map.setView(center, 14);
+                }
+            })
+        }
+    });
+
+    layer_geojson.eachLayer(function(layer){
+        var total = layer.feature.properties.total;
+            radius = calculate_proportional_radius(total);
+        layer.setRadius(radius);
+    });
+
+    return layer_geojson;
+}
+
+/**
+ * returns value min and value max of attributes layer quantitative total
+ * @param {object} layer_geojson - instance L.geoJson leaflet
+ * @returns {array} - [value min, value max]
+ */
+function calculate_values_min_max_layer(layer_geojson){
+    let  array_values_quantitative = [];
+
+    layer_geojson.eachLayer(function(layer){
+        array_values_quantitative.push(
+            layer.feature.properties.total
+        );
+    });
+
+    let value_min = Math.min.apply(Math, array_values_quantitative);
+    let value_max = Math.max.apply(Math, array_values_quantitative);
+
+    return [value_min, value_max];
+}
+
+function create_map(geojson){
+    const initial_coordinates = [10.90847, -72.08446];
+    const initial_zoom = 7;
 
     var map = L.map('map', {
-		center: coordenadas_iniciales,
-		zoom: zoom_inicial,
+		center: initial_coordinates,
+		zoom: initial_zoom,
 		minZoom: 7,
-		maxZoom: 18
+		maxZoom: 16
 	});
 
     L.control.scale({imperial: false}).addTo(map);
@@ -155,29 +219,19 @@ function cargar_mapa(){
 		type:'osm'
 	}).addTo(map);
 
-    var leyenda = crear_leyenda(1, 10);
+    var layer_geojson = create_layer_circle(geojson, map);
 
-    leyenda.addTo(map);
+    layer_geojson.addTo(map);
 
-    var control_rango = null,
-        control_select = null;
+    var [value_min, value_max] = calculate_values_min_max_layer(layer_geojson);
 
-    const media_query = "(max-width: 600px)";
+    var legend = create_legend(value_min, value_max);
+    legend.addTo(map);
 
-    if(window.matchMedia(media_query).matches){
+    let control_select = create_control_select(map, layer_geojson);
+    control_select.addTo(map);
 
-        control_select = cargar_control_seleccion();
-        control_select.addTo(map);
-
-    }else{
-        var div_texto = cargar_texto_input('Marzo');
-        control_rango = cargar_control_deslizante();
-
-        control_rango.addTo(map);
-        div_texto.addTo(map);
-    }
-
-    var control_vertical = L.control.custom({
+    let control_vertical = L.control.custom({
         position: 'topright',
         content : `
             <button data-btn="zoom_init" class="btn_custom" id="zoom_init">
@@ -213,7 +267,7 @@ function cargar_mapa(){
             click: function(data)
             {
                 var dataset = data.target.dataset.btn,
-                    btn = seleccionarElemento('#' + dataset);
+                    btn = selectElement('#' + dataset);
 
                 btn.disabled = true;
 
@@ -227,44 +281,54 @@ function cargar_mapa(){
 
     control_vertical.addTo(map);
 
-    window.addEventListener('resize', function(){
-        if(window.matchMedia(media_query).matches){
+}
 
-            if(control_rango != null){
-                map.removeControl(div_texto);
-                map.removeControl(control_rango);
-                map.removeControl(control_vertical);
-                control_rango = null;
+async function get_data_json(url){
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+}
+
+function create_geojson(array_response_data){
+    let geojson = {
+        type : 'FeatureCollection',
+        features : []
+    };
+
+    array_response_data.forEach((element) => {
+        geojson.features.push(
+            {
+                type : 'Feature',
+                geometry : {
+                    type : 'Point',
+                    coordinates: [element[3], element[4]]
+                },
+                properties: {
+                    total: element[0],
+                    mes: element[1],
+                    id_comunidad : element[2]
+                }
             }
+        )
+    });
 
-            if(control_select == null){
-                control_select = cargar_control_seleccion();
-                control_select.addTo(map);
-                control_vertical.addTo(map);
-            }
+    return geojson;
+}
 
-        }else{
+function load(){
 
-            if(control_select != null){
-                map.removeControl(control_select);
-                control_select = null;
-            }
-
-            if(control_rango == null){
-                div_texto = cargar_texto_input('Marzo');
-                control_rango = cargar_control_deslizante();
-
-                control_rango.addTo(map);
-                div_texto.addTo(map);
-            }
-            
-        }
-    }, false);
+    Promise.all([
+        get_data_json('assets/php/crear_arreglo_comunidades.php')
+    ])
+    .then((array_response_data) =>{
+        let array_data_point = array_response_data[0];
+        let geojson = create_geojson(array_data_point.datos);
+        create_map(geojson);
+    })
+    .catch((error) => {
+		console.log(error);
+	})
 
 }
 
-function iniciar(){
-    cargar_mapa();
-}
-
-window.addEventListener('load', iniciar, false);
+window.addEventListener('load', load, false);

@@ -101,12 +101,19 @@
         <header>
             <div>
                 <svg><use xlink:href="#coronavirus"/></svg>
-                <a href="#">
-                    Distribución geográfica de casos COVID-19 en el estado Zulia
+                <a id="header_link" data-month="3" data-min="0" data-max="0" href="#">
+                    Distribución geográfica de casos COVID-19 en el estado Zulia época 2020
                 </a>
             </div>
         </header>
         <div id="map"></div>
     </main>
+    <aside id="wallpaper" class="hide">
+        <div id="contenido" class="precargar_datos">
+            <div class="loader"></div>
+            <h3>Realizando la petición al servidor</h3>
+            <h3>Espere un momento</h3>
+        </div>
+    </aside>
 </body>
 </html>

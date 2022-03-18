@@ -25,6 +25,43 @@ body{
     background-color: whitesmoke;
 }
 
+.wallpaper{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1080;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hide{
+    display: none;
+}
+
+.precargar_datos{
+    background-color: var(--segundo-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    border-radius: .5rem;
+}
+
+.precargar_datos h3{
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: var(--primer-color);
+    font-family: var(--font-body);
+}
+
 header{
     height: var(--altura-encabezado);
     display: flex;
@@ -33,6 +70,21 @@ header{
     justify-content: center;
     background-color: var(--primer-color);
 }
+
+.loader{
+    border: .5rem solid var(--tercer-color);
+    border-top: .5rem solid var(--primer-color);
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: .8rem;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
 header div{
     display: flex;
@@ -198,25 +250,25 @@ div.texto_temporal h3{
     margin-left: .5rem;
 }
 
-.contenedor_leyenda{
+.legend_container{
     background-color: #f4f4f4;
     padding: .2rem;
     border-radius: .5rem;
 }
 
-.contenedor_leyenda h2{
+.legend_container h2{
     font-family: var(--font-body);
     font-size: 1.2rem;
     font-weight: normal;
     color: var(--primer-color);
 }
 
-.contenedor_simbolos{
+.symbols_container{
     float: left;
     margin-left: 50px;
 }
 
-.leyenda_circulo{
+.legend_circle{
     border-radius: 50%;
     border: 1px solid var(--primer-color);
     background-color: var(--primer-color);
@@ -224,7 +276,7 @@ div.texto_temporal h3{
     display: inline-block;
 }
 
-.titulo_leyenda{
+.legend_title{
     position: absolute;
     right: 8px;
     font-family: var(--font-body);
@@ -326,11 +378,11 @@ symbol g polygon{
         width: 10rem;
     }
 
-    .contenedor_leyenda h2{
+    .legend_container h2{
         font-size: .8rem;
     }
 
-    .titulo_leyenda{
+    .legend_title{
         font-size: .7rem;
     }
 
