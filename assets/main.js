@@ -2,6 +2,8 @@ const selectElement = (element) => document.querySelector(element);
 
 const selectVariableCSS = (element) => getComputedStyle(document.body).getPropertyValue(element);
 
+const url_post_array_community = 'assets/php/create_array_community_points.php';
+
 /**
  * list name month in spanish
  * @constant
@@ -18,7 +20,7 @@ const array_month = ['Marzo', 'Abril', 'Mayo', 'Junio',
  * @param {object} layer - instance L.geoJson of leaflet
  * @returns {object} - object div html
  */
-function create_control_select(map, layer){
+function create_control_select({map, layer, data_dpt, initial_coordinates, initial_zoom}){
     var control = L.control({position: 'topright'});
 
     control.onAdd = function(){
@@ -46,7 +48,22 @@ function create_control_select(map, layer){
             let element = e.target;
             let value = element.value;
             element.disabled = true;
-            console.log(value);
+
+            var FormData_input = new FormData();
+            FormData_input.append('number_month', value);
+
+            get_post_data_json(url_post_array_community, FormData_input)
+            .then((response) =>{
+                let geojson = create_geojson(response.data);
+                map.removeLayer(layer);
+                layer = create_layer_circle(geojson, map, data_dpt);
+                layer.addTo(map);
+                map.setView(initial_coordinates, initial_zoom);
+                element.removeAttribute('disabled');
+            })
+            .catch((error) =>{
+                console.log(error);
+            })
 
         }, false);
 
@@ -150,20 +167,20 @@ function create_popup(props){
         <caption>RESUMEN</caption>
             <tr>
                 <th>MUNICIPIO</th>
-                <td>${props.municipio}<td>
-            <tr>
+                <td>${props.municipio}</td>
+            </tr>
             <tr>
                 <th>PARROQUIA</th>
-                <td>${props.parroquia}<td>
-            <tr>
+                <td>${props.parroquia}</td>
+            </tr>
             <tr>
                 <th>COMUNIDAD</th>
-                <td>${props.comunidad}<td>
+                <td>${props.comunidad}</td>
+            </tr>
             <tr>
-            <tr>
-                <th>TOTAL</th>
-                <td>${props.total}<td>
-            <tr>
+                <th># CASOS</th>
+                <td>${props.total}</td>
+            </tr>
         </table>
     `;
 
@@ -267,7 +284,13 @@ function create_map(geojson, data_dpt){
     var legend = create_legend(value_min, value_max);
     legend.addTo(map);
 
-    let control_select = create_control_select(map, layer_geojson);
+    let control_select = create_control_select({
+        map: map, 
+        layer: layer_geojson, 
+        data_dpt: data_dpt,
+        initial_coordinates: initial_coordinates,
+        initial_zoom: initial_zoom
+    });
     control_select.addTo(map);
 
     let control_vertical = L.control.custom({
@@ -375,7 +398,7 @@ function load(){
     FormData_input.append('number_month', 3);
 
     Promise.all([
-        get_post_data_json('assets/php/create_array_community_points.php', FormData_input),
+        get_post_data_json(url_post_array_community, FormData_input),
         get_data_json('assets/php/create_data_dpt.php')
     ])
     .then((array_response_data) =>{

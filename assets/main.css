@@ -239,6 +239,33 @@ symbol g polygon{
     fill: var(--primer-color);
 }
 
+.table_popup{
+    font-size: 1rem;
+    border-collapse: collapse;
+    border-radius: .3rem;
+}
+
+.table_popup caption{
+    background-color: var(--primer-color);
+    color: var(--segundo-color);
+    font-family: var(--font-header);
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: .3rem;
+    border-radius: .3rem .3rem 0 0;
+}
+
+.table_popup tr th{
+    font-weight: 700;
+}
+
+.table_popup tr th,
+.table_popup tr td{
+    padding: .3rem;
+    border: 1px solid #ddd;
+    font-family: var(--font-body);
+}
+
 @media screen and (min-width: 900px){
     body{
         max-width: 1200px;
@@ -248,6 +275,25 @@ symbol g polygon{
 
     input.control_tiempo{
         width: 30rem;
+    }
+
+    .table_popup tr:nth-child(even){
+        background-color: var(--segundo-color);
+    }
+}
+
+@media screen and (max-width: 900px){
+    .table_popup tr th,
+    .table_popup tr td{
+        display: block;
+    }
+
+    .table_popup tr th{
+        background-color: var(--segundo-color);
+    }
+
+    .table_popup tr td{
+        text-align: right;
     }
 }
 
