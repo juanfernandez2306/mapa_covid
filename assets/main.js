@@ -322,7 +322,7 @@ function load(){
     ])
     .then((array_response_data) =>{
         let array_data_point = array_response_data[0];
-        let geojson = create_geojson(array_data_point.datos);
+        let geojson = create_geojson(array_data_point.data);
         create_map(geojson);
     })
     .catch((error) => {
