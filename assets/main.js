@@ -144,13 +144,39 @@ function create_legend(value_min, value_max){
     return legend;
 }
 
+function create_popup(props){
+    let html = `
+        <table class="table_popup">
+        <caption>RESUMEN</caption>
+            <tr>
+                <th>MUNICIPIO</th>
+                <td>${props.municipio}<td>
+            <tr>
+            <tr>
+                <th>PARROQUIA</th>
+                <td>${props.parroquia}<td>
+            <tr>
+            <tr>
+                <th>COMUNIDAD</th>
+                <td>${props.comunidad}<td>
+            <tr>
+            <tr>
+                <th>TOTAL</th>
+                <td>${props.total}<td>
+            <tr>
+        </table>
+    `;
+
+    return html;
+}
+
 /**
  * create layer circle
  * @param {object} geojson 
  * @param {object} map - instance L.map leaflet
  * @returns {object} layer_geojson - instance L.geoJson leaflet
  */
-function create_layer_circle(geojson, map){
+function create_layer_circle(geojson, map, data_dpt){
     let layer_geojson =  L.geoJson(geojson, {
         pointToLayer: function(feature, latlng){
             return L.circleMarker(latlng, {
@@ -163,8 +189,21 @@ function create_layer_circle(geojson, map){
         onEachFeature: function(feature, layer){
             layer.on({
                 click: function(e){
-                    var center = e.target._latlng;
+                    var center = e.target._latlng,
+                        props = feature.properties;
+                    
+                    var filter_array_data = data_dpt.filter((data) =>{
+                        return data.cod_parr == props.cod_parr
+                    });
+
+                    props.municipio = filter_array_data[0].municipio;
+                    props.parroquia = filter_array_data[0].parroquia;
+                    
                     map.setView(center, 14);
+
+                    var html_content_popup = create_popup(props);
+
+                    layer.bindPopup(html_content_popup).openPopup();
                 }
             })
         }
@@ -199,7 +238,7 @@ function calculate_values_min_max_layer(layer_geojson){
     return [value_min, value_max];
 }
 
-function create_map(geojson){
+function create_map(geojson, data_dpt){
     const initial_coordinates = [10.90847, -72.08446];
     const initial_zoom = 7;
 
@@ -219,7 +258,7 @@ function create_map(geojson){
 		type:'osm'
 	}).addTo(map);
 
-    var layer_geojson = create_layer_circle(geojson, map);
+    var layer_geojson = create_layer_circle(geojson, map, data_dpt);
 
     layer_geojson.addTo(map);
 
@@ -289,6 +328,21 @@ async function get_data_json(url){
     return data;
 }
 
+/**
+ * 
+ * @param {string} url 
+ * @param {object} FormData_input - instance new FormData JS
+ * @returns 
+ */
+async function get_post_data_json(url, FormData_input){
+    let response = await fetch(url, {
+        method : 'POST',
+        body : FormData_input
+    });
+    let data = await response.json();
+    return data;
+}
+
 function create_geojson(array_response_data){
     let geojson = {
         type : 'FeatureCollection',
@@ -305,8 +359,8 @@ function create_geojson(array_response_data){
                 },
                 properties: {
                     total: element[0],
-                    mes: element[1],
-                    id_comunidad : element[2]
+                    comunidad: element[1],
+                    cod_parr : element[2]
                 }
             }
         )
@@ -317,13 +371,19 @@ function create_geojson(array_response_data){
 
 function load(){
 
+    let FormData_input = new FormData();
+    FormData_input.append('number_month', 3);
+
     Promise.all([
-        get_data_json('assets/php/crear_arreglo_comunidades.php')
+        get_post_data_json('assets/php/create_array_community_points.php', FormData_input),
+        get_data_json('assets/php/create_data_dpt.php')
     ])
     .then((array_response_data) =>{
         let array_data_point = array_response_data[0];
+        let data_dpt = array_response_data[1];
         let geojson = create_geojson(array_data_point.data);
-        create_map(geojson);
+        
+        create_map(geojson, data_dpt);
     })
     .catch((error) => {
 		console.log(error);
