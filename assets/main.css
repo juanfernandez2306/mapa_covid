@@ -43,7 +43,16 @@ body{
     display: none;
 }
 
-.precargar_datos{
+main{
+    animation-duration: .7s;
+}
+
+@keyframes fade_in_data{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.preloader_wallpaper{
     background-color: var(--segundo-color);
     display: flex;
     flex-direction: column;
@@ -54,7 +63,7 @@ body{
     border-radius: .5rem;
 }
 
-.precargar_datos h3{
+.preloader_wallpaper h3{
     margin: 0;
     font-size: 1.2rem;
     font-weight: normal;
@@ -71,20 +80,153 @@ header{
     background-color: var(--primer-color);
 }
 
-.loader{
-    border: .5rem solid var(--tercer-color);
-    border-top: .5rem solid var(--primer-color);
+:root{
+    --label-preloader: 5rem;
+    --width-icon: 1.12rem;
+    --heigth-icon: 2.24rem;
+    --left-icon: 1.12rem;
+}
+
+.preloader_wallpaper label{
+    position: relative;
+    height: var(--label-preloader);
+    width: var(--label-preloader);
+    display: inline-block;
     border-radius: 50%;
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: .8rem;
-    animation: spin 2s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+    animation: rotate 1.2s linear infinite;
+    border: 2px solid var(--tercer-color);
+    opacity: .5;
+    border-left-color: var(--primer-color);
+}
+
+@keyframes rotate {
+    50%{
+        border-left-color: var(--cuarto-color);
+    }
+    75%{
+        border-left-color: var(--primer-color);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.preloader_wallpaper label .check-icon{
+    display: none;
+}
+
+.preloader_wallpaper.success label .check-icon:after{
+    position: absolute;
+    content: "";
+    top: 50%;
+    left: var(--left-icon);
+    transform: scaleX(-1) rotate(135deg);
+    border-top: 4px solid var(--primer-color);
+    border-right: 4px solid var(--primer-color);
+    height: var(--heigth-icon);
+    width: var(--width-icon);
+    transform-origin: left top;
+    animation: check-icon 0.8s ease;
+}
+
+.preloader_wallpaper.error label .check-icon:after{
+    color: red;
+    content: "\274c";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    line-height: var(--label-preloader);
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 100;
+    font-family: Arial, Helvetica, sans-serif;
+    animation: error-icon 0.8s ease;
+}
+
+.preloader_wallpaper label + h3{
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
+.preloader_wallpaper.error label + h3{
+    color: red;
+}
+
+.preloader_wallpaper button{
+    padding: .8rem;
+    border-radius: .3rem;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: var(--segundo-color);
+    font-weight: 700;
+    display: none;
+}
+
+.preloader_wallpaper.success button{
+    background-color: var(--primer-color);
+}
+
+.preloader_wallpaper.success button:hover{
+    background-color: var(--tercer-color);
+}
+
+.preloader_wallpaper.error button{
+    background-color: red;
+}
+
+.preloader_wallpaper.error button:hover{
+    background-color: #e57373;
+}
+
+@keyframes error-icon {
+    0%{font-size: .5rem;}
+    50%{font-size: 2.5rem;}
+    100%{font-size: .5rem;}
+}
+
+@keyframes check-icon {
+    0%{
+        height: 0;
+        width: 0;
+        opacity: 1;
+    }
+    20%{
+        height: 0;
+        width: var(--width-icon);
+        opacity: 1;
+    }
+    40%{
+        height: var(--heigth-icon);
+        width: var(--width-icon);
+        opacity: 1;
+    }
+    100%{
+        height: var(--heigth-icon);
+        width: var(--width-icon);
+        opacity: 1;
+    }
+}
+
+.preloader_wallpaper.stop_animation_preloader label .check-icon{
+    display: block;
+}
+
+.preloader_wallpaper.stop_animation_preloader button{
+    display: block;
+}
+
+.preloader_wallpaper.stop_animation_preloader label{
+    animation: none;
+    border-color: var(--primer-color);
+    opacity: .8;
+    transition: border 0.5s ease-out;
+}
+
+.preloader_wallpaper.error.stop_animation_preloader label{
+    border-color: red;
+}
 
 header div{
     display: flex;

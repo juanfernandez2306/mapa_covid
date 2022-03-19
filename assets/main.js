@@ -20,7 +20,7 @@ const array_month = ['Marzo', 'Abril', 'Mayo', 'Junio',
  * @param {object} layer - instance L.geoJson of leaflet
  * @returns {object} - object div html
  */
-function create_control_select({map, layer, data_dpt, initial_coordinates, initial_zoom}){
+function create_control_select({map, layer, data_dpt, initial_coordinates, initial_zoom, legend}){
     var control = L.control({position: 'topright'});
 
     control.onAdd = function(){
@@ -52,16 +52,25 @@ function create_control_select({map, layer, data_dpt, initial_coordinates, initi
             var FormData_input = new FormData();
             FormData_input.append('number_month', value);
 
+            selectElement('#wallpaper_preloader').classList.remove('hide');
+            selectElement('#wallpaper_preloader').classList.add('wallpaper');
+
             get_post_data_json(url_post_array_community, FormData_input)
             .then((response) =>{
                 let geojson = create_geojson(response.data);
                 map.removeLayer(layer);
+                map.removeControl(legend);
                 layer = create_layer_circle(geojson, map, data_dpt);
+                legend = create_legend(layer);
                 layer.addTo(map);
+                legend.addTo(map);
                 map.setView(initial_coordinates, initial_zoom);
                 element.removeAttribute('disabled');
+
+                stop_animation_loader('success', 'Petición satisfactoria')
             })
             .catch((error) =>{
+                stop_animation_loader('error', 'Error de conexión')
                 console.log(error);
             })
 
@@ -97,13 +106,14 @@ function round_number(number){
 
 /**
  * create legend html in leaflet
- * @param {number} value_min 
- * @param {number} value_max 
+ * @param {object} layer_geojson - instance L.geoJson leaflet
  * @returns {object} - object L.control leaflet
  */
 
-function create_legend(value_min, value_max){
+function create_legend(layer_geojson){
     var legend = L.control({position: 'bottomright'});
+
+    var [value_min, value_max] = calculate_values_min_max_layer(layer_geojson);
 
     var scale_factor = 1;
 
@@ -279,9 +289,7 @@ function create_map(geojson, data_dpt){
 
     layer_geojson.addTo(map);
 
-    var [value_min, value_max] = calculate_values_min_max_layer(layer_geojson);
-
-    var legend = create_legend(value_min, value_max);
+    var legend = create_legend(layer_geojson);
     legend.addTo(map);
 
     let control_select = create_control_select({
@@ -289,7 +297,8 @@ function create_map(geojson, data_dpt){
         layer: layer_geojson, 
         data_dpt: data_dpt,
         initial_coordinates: initial_coordinates,
-        initial_zoom: initial_zoom
+        initial_zoom: initial_zoom,
+        legend: legend
     });
     control_select.addTo(map);
 
@@ -332,6 +341,10 @@ function create_map(geojson, data_dpt){
                     btn = selectElement('#' + dataset);
 
                 btn.disabled = true;
+
+                if(dataset == 'zoom_init'){
+                    map.setView(initial_coordinates, initial_zoom);
+                }
 
                 setTimeout(()=>{
                     btn.removeAttribute('disabled');
@@ -392,10 +405,42 @@ function create_geojson(array_response_data){
     return geojson;
 }
 
+function restart_style_preloader_wallpaper(e){
+    e.preventDefault;
+    let btn = e.target;
+    btn.disabled = true;
+
+    var preloader = selectElement('.preloader_wallpaper');
+    preloader.classList.remove('error');
+    preloader.classList.remove('success');
+    preloader.classList.remove('stop_animation_preloader');
+    preloader.querySelector('h3').innerHTML = 'Espere un momento';
+
+    selectElement('#wallpaper_preloader').classList.remove('wallpaper');
+    selectElement('#wallpaper_preloader').classList.add('hide');
+
+    selectElement('main').style['animation-name'] = 'fade_in_data';
+
+    setTimeout(() => {
+        btn.removeAttribute('disabled');
+        selectElement('main').style['animation-name'] = '';
+    }, 1000);
+
+}
+
+function stop_animation_loader(class_response, text_response){
+    var preloader = selectElement('.preloader_wallpaper');
+    preloader.classList.add(class_response);
+    preloader.classList.add('stop_animation_preloader');
+    preloader.querySelector('h3').innerHTML = text_response;
+}
+
 function load(){
 
     let FormData_input = new FormData();
     FormData_input.append('number_month', 3);
+
+    selectElement('#restart_preloader').addEventListener('click', restart_style_preloader_wallpaper, false);
 
     Promise.all([
         get_post_data_json(url_post_array_community, FormData_input),
@@ -410,7 +455,7 @@ function load(){
     })
     .catch((error) => {
 		console.log(error);
-	})
+	});
 
 }
 
