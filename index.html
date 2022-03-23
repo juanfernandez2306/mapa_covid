@@ -9,6 +9,7 @@
     <script src="../complementos/leafletJS/leaflet_v1.7.1/leaflet-src.js"></script>
     
     <script src="assets/Leaflet.Control.Custom.js"></script>
+    <script src="../complementos/chartjs/dist/chart.min.js"></script>
     <link rel="stylesheet" href="assets/main.css">
     <script src="assets/main.js"></script>
 </head>
@@ -108,6 +109,36 @@
         </header>
         <div id="map"></div>
     </main>
+    <aside class="sidebar">
+        <section>
+            <div id="header_response" class="header_response">
+                <div>
+                    <span>Consulta</span>
+                </div>
+                <a>&times;</a>
+            </div>
+        </section>
+        <section id="content_response">
+            <div id="simples_metrics">
+                <div>
+                    <canvas id="chart_pie_sex"></canvas>
+                </div>
+                <div>
+                    <canvas id="group_age"></canvas>
+                </div>
+                <div>
+                    <canvas id="week_epi"></canvas>
+                </div>
+                <div>
+                    <canvas id="distribution_population"></canvas>
+                </div>
+            </div>
+
+        </section>
+        <section>
+            <button>Cerrar</button>
+        </section>
+    </aside>
     <aside id="wallpaper_preloader" class="hide">
         <div class="preloader_wallpaper">
             <label>

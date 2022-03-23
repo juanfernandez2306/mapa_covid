@@ -1,4 +1,4 @@
-@font-face {
+@font-face{
     font-family: Nunito;
     src: url(../../complementos/font/Nunito/Nunito-Regular.ttf);
 }
@@ -16,10 +16,20 @@
     --cuarto-color: #948522;
     --font-header: roboto, Arial, Helvetica, sans-serif;
     --font-body: Nunito, Arial, Helvetica, sans-serif;
+    --firts-color-bar: #9ADCFF;
+    --second-color-bar: #FFFA4D;
+    --third-color-bar: #FFB2A6;
 }
+
+html{
+    height: -webkit-fill-available;
+}
+
 body{
     font-size: 16px;
     width: 100vw;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
     height: 100vh;
     margin: 0;
     background-color: whitesmoke;
@@ -50,6 +60,108 @@ main{
 @keyframes fade_in_data{
     from {opacity: 0;}
     to {opacity: 1;}
+}
+
+/*max value z-index in css leaflet is 1000*/
+.sidebar{
+    background-color: var(--primer-color);
+    color: var(--segundo-color);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-rows: auto 1fr auto;
+}
+
+.sidebar section{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    font-family: var(--font-body);
+}
+
+.header_response{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    padding-top: .5rem;
+}
+
+.header_response a{
+    text-decoration: none;
+    font-size: 2.5rem;
+}
+
+.sidebar section:last-child{
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sidebar section:last-child button{
+    background-color: var(--segundo-color);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: .5rem;
+    border-radius: .3rem;
+    color: var(--primer-color);
+}
+
+.sidebar section:last-child button:hover{
+    background-color: var(--tercer-color);
+    color: var(--segundo-color);
+}
+
+#content_response{
+    overflow-y: scroll;
+    scrollbar-color: var(--segundo-color) var(--tercer-color);
+}
+
+#simples_metrics{
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 150px) minmax(150px, 316px) minmax(200px, 600px);
+    grid-template-areas: "chart1 chart2 chart2"
+                        "chart1 chart2 chart2"
+                        "chart3 chart3 chart3"
+                        "chart4 chart4 chart4";
+}
+
+#simples_metrics > div:nth-child(1){
+    grid-area: chart1;
+}
+
+#simples_metrics > div:nth-child(2){
+    grid-area: chart2;
+}
+
+#simples_metrics > div:nth-child(3){
+    grid-area: chart3;
+}
+
+#simples_metrics > div:nth-child(4){
+    grid-area: chart4;
+}
+
+#simples_metrics div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#simples_metrics div canvas{
+    max-width: 80%;
+    max-height: 100% !important;
 }
 
 .preloader_wallpaper{
@@ -415,6 +527,10 @@ symbol g polygon{
         margin-right: auto;
     }
 
+    .sidebar section{
+        max-width: 1000px;
+    }
+
     input.control_tiempo{
         width: 30rem;
     }
@@ -437,6 +553,17 @@ symbol g polygon{
     .table_popup tr td{
         text-align: right;
     }
+
+    #simples_metrics{
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 300px 500px repeat(2, 300px);
+        grid-template-areas: "chart1 chart1"
+                        "chart2 chart2"
+                        "chart3 chart3"
+                        "chart4 chart4";
+    }
+
+    
 }
 
 @media screen and (min-width: 400px) and (max-width:900px){
