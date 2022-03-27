@@ -495,23 +495,18 @@ function create_option_chart(){
     };
 }
 
-function calculate_index_axis_chart_bar(){
-    let intViewportWidth = window.innerWidth;
-    let indexAxis = 'y';
+/**
+ * create chart pie for distribution sex
+ * @param {String} id_element - name id target canvas
+ * @param {Array.<Number, Number>} data_array - [count male, count female] 
+ */
+function create_chart_pie(id_element, data_array){
+    var options = create_option_chart();
+    options.plugins.title.text = 'Distribución por sexo';
 
-    if(intViewportWidth < 600){
-        indexAxis = 'x';
-    }
-
-    return indexAxis;
-}
-
-
-function create_chart_pie({id_element, array_data, options}){
-    
     let data = {
         datasets: [{
-            data: array_data,
+            data: data_array,
             backgroundColor: [
                 selectVariableCSS('--firts-color-bar'),
                 selectVariableCSS('--third-color-bar')
@@ -530,10 +525,33 @@ function create_chart_pie({id_element, array_data, options}){
         data: data,
         options: options
     });
-
 }
 
-function create_chart_stacked_bar({id_element, array_data_male, array_data_female, options}){
+/**
+ * Create chart stacked bar distribution age
+ * @param {Object} param
+ * @param {String} param.id_element - name id target element canvas
+ * @param {Array.<Number>} param.array_data_male
+ * @param {Array.<Number>} param.array_data_female
+ * @returns {Object} myChart - Object type Chart JS
+ */
+function create_chart_stacked_bar({id_element, array_data_male, array_data_female}){
+
+    let text_media_query = '(max-width: 600px)';
+
+    var options = create_option_chart();
+    options.plugins.title.text = 'Distribución por edad';
+    options.scales.x.stacked = true;
+    options.scales.x.display = true;
+    options.scales.x.title.display = true;
+    options.scales.x.title.text = '# de casos';
+
+    options.scales.y.stacked = true;
+    options.scales.y.display = true;
+    options.scales.y.title.display = true;
+    options.scales.y.title.text = 'Rango de edad (años)';
+
+    options.maintainAspectRatio = false;
 
     let data = {
         labels: ['0-10', '11-20', '21-30', '31-40',
@@ -555,17 +573,51 @@ function create_chart_stacked_bar({id_element, array_data_male, array_data_femal
       ]
     };
 
+    
+    if(window.matchMedia(text_media_query).matches){
+        options.indexAxis = 'x';
+    }else{
+        options.indexAxis = 'y';
+    }
+        
     let ctx = document.getElementById(id_element);
     let myChart = new Chart(ctx, {
         type: 'bar',
         data: data,
         options: options
     });
-
+    
+    return myChart;
+    
 }
 
-function create_chart_line({id_element, label_array, data_count, data_month, options}){
+/**
+ * 
+ * @param {Object} param
+ * @param {String} param.id_element - name id target canvas
+ * @param {Array.<Number>} param.label_array
+ * @param {Array.<Number>} param.data_count
+ * @param {Array.<Number>} param.data_month
+ */
+function create_chart_line({id_element, label_array, data_count, data_month}){
+
+    let options = create_option_chart();
+    options.plugins.title.text = 'Consolidado por semana';
+    options.scales.x.display = true;
+    options.scales.x.title.display = true;
+    options.scales.x.title.text = 'Semana epidemiologica';
+
+    options.scales.y.display = true;
+    options.scales.y.title.display = true;
+    options.scales.y.title.text = '# de casos';
+
+    options.plugins.legend.display = false;
     
+    /**
+     * search name month in spanish
+     * @param {Object} tooltipItems
+     * @returns {String} - return name month in spanish
+     */
     const footer = (tooltipItems) => {
         let month_value = '';
       
@@ -601,73 +653,40 @@ function create_chart_line({id_element, label_array, data_count, data_month, opt
     });
 }
 
-function create_char_bar(id_element, data_count, label_array){
-    let options = {
-        indexAxis: 'y',
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-                display: true,
-                title: {
-                    display: true,
-                    text: '# de casos por 10.000 hab',
-                    color: selectVariableCSS('--segundo-color'),
-                    font: {
-                        size: 18,
-                        family: selectVariableCSS('--font-body')
-                    }
-                },
-                ticks: {
-                    color: selectVariableCSS('--segundo-color')
-                }
-            },
-            y: {
-                display: true,
-                title: {
-                    display: true,
-                    text: 'Municipios',
-                    color: selectVariableCSS('--segundo-color'),
-                    font: {
-                        size: 18,
-                        family: selectVariableCSS('--font-body')
-                    }
-                },
-                ticks: {
-                    color: selectVariableCSS('--segundo-color')
-                }
-            }
-        },
-        plugins: {
-            legend: {
-                display: false,
-                labels: {
-                    color: selectVariableCSS('--segundo-color'),
-                    font: {
-                        size: 16,
-                        family: selectVariableCSS('--font-body')
-                    }
-                }
-            },
-            title: {
-                display: true,
-                text: 'Distribución por municipios',
-                color: selectVariableCSS('--segundo-color'),
-                font: {
-                    size: 18,
-                    family: selectVariableCSS('--font-body')
-                }
-            },
-            subtitle: {
-                display: true,
-                text: 'Casos por 10.000 habitantes',
-                color: selectVariableCSS('--segundo-color'),
-                font: {
-                    size: 18,
-                    family: selectVariableCSS('--font-body')
-                }
-            } 
+/**
+ * 
+ * @param {Object} param
+ * @param {String} param.id_element - name id target canvas html
+ * @param {Array.<Number>} param.data_count
+ * @param {Array.<String>} param.label_array - name municipality
+ * @returns {Object} myChart - Object type chartjs
+ */
+function create_chart_data_bar({id_element, data_count, label_array}){
+
+    let options = create_option_chart();
+    options.plugins.title.text = 'Consolidado por municipios';
+    options.plugins.subtitle = {
+        display: true,
+        text: 'Casos por 10.000 habitantes',
+        color: selectVariableCSS('--segundo-color'),
+        font: {
+            size: 18,
+            family: selectVariableCSS('--font-body')
         }
     }
+
+    options.scales.x.display = true;
+    options.scales.x.title.display = true;
+    options.scales.x.title.text = '# de casos por 10.000 hab';
+
+    options.scales.y.display = true;
+    options.scales.y.title.display = true;
+    options.scales.y.title.text = 'Municipios';
+
+    options.plugins.legend.display = false;
+
+    options.indexAxis = 'y';
+    options.maintainAspectRatio = false;
 
     let data = {
         labels: label_array,
@@ -680,65 +699,166 @@ function create_char_bar(id_element, data_count, label_array){
     };
 
     let ctx = document.getElementById(id_element);
-    let myChart = new Chart(ctx, {
+
+    myChart = new Chart(ctx, {
         type: 'bar',
         data: data,
         options: options
     });
+
+    return myChart;
 }
 
-function load_simple_metrics(data_response){
-    let option_chart_pie = create_option_chart();
-        option_chart_pie.plugins.title.text = 'Distribución por sexo';
-    
-    create_chart_pie({
-        id_element: 'chart_pie_sex',
-        array_data: data_response.data.distribution_sex,
-        options: option_chart_pie
-    });
+/**
+ * create table
+ * @param {Array.<Number>} data_count 
+ * @param {Array.<String>} label_array - name municipality
+ * @returns {Object} table - table html
+ */
+function create_table_data_bar(data_count, label_array){
+    let table = document.createElement('table');
+    let caption = document.createElement('caption');
+    caption.innerHTML = '<h2>Consolidado por municipios</h2><h3>Casos por 10.000 hab</h3>';
 
-    let option_chart_stacked_bar = create_option_chart();
-    option_chart_stacked_bar.plugins.title.text = 'Distribución por edad';
-    option_chart_stacked_bar.scales.x.stacked = true;
-    option_chart_stacked_bar.scales.x.display = true;
-    option_chart_stacked_bar.scales.x.title.display = true;
-    option_chart_stacked_bar.scales.x.text = '# de casos';
+    table.appendChild(caption);
 
-    option_chart_stacked_bar.scales.y.stacked = true;
-    option_chart_stacked_bar.scales.y.display = true;
-    option_chart_stacked_bar.scales.y.title.display = true;
-    option_chart_stacked_bar.scales.y.text = 'Rango de edad (años)';
+    data_count.forEach((element, index, array) => {
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        var value_th = label_array[index];
+        var text_th = document.createTextNode(value_th);
+        th.appendChild(text_th);
+        tr.appendChild(th);
 
-    option_chart_stacked_bar.indexAxis = calculate_index_axis_chart_bar();
-    option_chart_stacked_bar.maintainAspectRatio = false;
+        var td = document.createElement('td');
+        var number_round = Math.round((element + Number.EPSILON) * 10) / 10;
+        var text_td = document.createTextNode(number_round);
+        td.appendChild(text_td);
+        tr.appendChild(td);
 
-    create_chart_stacked_bar({
-        id_element: 'group_age',
-        array_data_male: data_response.data.distribution_age.male,
-        array_data_female: data_response.data.distribution_age.female,
-        options: option_chart_stacked_bar
+        table.appendChild(tr);
     })
 
-    let option_chart_line = create_option_chart();
-    option_chart_line.plugins.title.text = 'Distribución por semana';
-    option_chart_line.scales.x.display = true;
-    option_chart_line.scales.x.title.display = true;
-    option_chart_line.scales.x.title.text = 'Semana epidemiologica';
+    return table;
+}
 
-    option_chart_line.scales.y.display = true;
-    option_chart_line.scales.y.title.display = true;
-    option_chart_line.scales.y.title.text = '# de casos';
+/**
+ * load chart with chartJS
+ * @param {Object} data_response
+ * @property {Boolean} data_response.response
+ * @property {Object} data_response.data
+ * @property {Array.<Number>} data_response.data.distribution_sex
+ * @property {Object} data_response.data.distribution_age
+ * @property {Array.<Number>} data_response.data.distribution_age.male
+ * @property {Array.<Number>} data_response.data.distribution_age.female
+ * @property {Object} data_response.data.distribution_week_epi
+ * @property {Array.<string>} data_response.data.distribution_week_epi.label
+ * @property {Array.<Number>} data_response.data.distribution_week_epi.count
+ * @property {Array.<Number>} data_response.data.distribution_week_epi.month
+ * @property {Object} data_response.data.distribution_population
+ * @property {Array.<string>} data_response.data.distribution_population.label
+ * @property {Array.<Number>} data_response.data.distribution_population.count
+ */
+function load_simple_metrics(data_response){
+    
+    create_chart_pie(
+        'chart_pie_sex',
+        data_response.data.distribution_sex
+    )
 
-    option_chart_line.plugins.legend.display = false;
+    let chart_stacked_bar = create_chart_stacked_bar({
+        id_element: 'group_age',
+        array_data_male: data_response.data.distribution_age.male,
+        array_data_female: data_response.data.distribution_age.female
+    });
+
+    /**
+     * value initial media query match
+     * @type {Boolean}
+     * @constant
+     */
+    let media_query_stacked_bar = window.matchMedia('(max-width: 600px)').matches;
+
+    window.addEventListener('resize', function(){
+        /**
+         * value for rezise window media query match
+         * @type {Boolean}
+         * @constant
+         */
+        let media_query_stacked_bar_change = window.matchMedia('(max-width: 600px)').matches;
+
+        if(media_query_stacked_bar != media_query_stacked_bar_change){
+            if(chart_stacked_bar){
+                chart_stacked_bar.destroy();
+            }
+    
+            chart_stacked_bar = create_chart_stacked_bar({
+                id_element: 'group_age',
+                array_data_male: data_response.data.distribution_age.male,
+                array_data_female: data_response.data.distribution_age.female
+            });
+
+            media_query_stacked_bar = media_query_stacked_bar_change;
+        }
+    }, false);
 
     create_chart_line({
         id_element: 'week_epi',
         label_array: data_response.data.distribution_week_epi.label,
         data_count: data_response.data.distribution_week_epi.count,
-        data_month: data_response.data.distribution_week_epi.month,
-        options: option_chart_line
+        data_month: data_response.data.distribution_week_epi.month
     })
-    
+
+    let text_media_query_chart_bar = "(min-width: 800px)";
+
+    let initial_value_media_query_chart_bar = window.matchMedia(text_media_query_chart_bar).matches;
+
+    let chart_bar = false;
+
+    let table_chart_bar = create_table_data_bar(
+        data_response.data.distribution_population.count,
+        data_response.data.distribution_population.label
+    );
+
+    if(initial_value_media_query_chart_bar){
+        selectElement('#table_content_bar').style.display = 'none';
+
+        chart_bar = create_chart_data_bar({
+            id_element: 'distribution_population',
+            data_count: data_response.data.distribution_population.count,
+            label_array: data_response.data.distribution_population.label
+        });
+    }else{
+        selectElement('#distribution_population').style.display = 'none';
+        selectElement('#table_content_bar').appendChild(table_chart_bar);
+    }
+
+    window.addEventListener('resize', function(){
+        let value_media_query_chart_bar_change = window.matchMedia(text_media_query_chart_bar).matches;
+
+        if(value_media_query_chart_bar_change == false){
+            if(chart_bar){
+                chart_bar.destroy();
+                chart_bar = false;
+
+                selectElement('#distribution_population').style.display = 'none';
+                selectElement('#table_content_bar').style.display = 'block';
+                selectElement('#table_content_bar').appendChild(table_chart_bar);
+            }
+        }else{
+            if(chart_bar == false){
+                selectElement('#table_content_bar').style.display = 'none';
+                selectElement('#table_content_bar').innerHTML = '';
+
+                selectElement('#distribution_population').style.display = 'block';
+                chart_bar = create_chart_data_bar({
+                    id_element: 'distribution_population',
+                    data_count: data_response.data.distribution_population.count,
+                    label_array: data_response.data.distribution_population.label
+                });
+            }
+        }
+    }, false);
 
 }
 
