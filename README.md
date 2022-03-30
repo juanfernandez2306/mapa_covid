@@ -23,6 +23,19 @@ de la epidemia del __coronavirus__, desatada en Wuhan, China, en Diciembre de 20
 
 -[Leaflet Control Custom](https://github.com/yigityuce/Leaflet.Control.Custom)
 
+## :rocket: Instalación
+Clonar proyecto
+```
+	git clone https://github.com/juanfernandez2306/mapa_covid.git
+```
+
+- Crear una base de datos MySQL +V5.7 con codificación UTF-8
+- Nombre de la base de datos _mapa_zulia_
+- Cargar script assets/database/01_dpt.sql
+- Cargar script assets/database/02_places_community.sql
+- Cargar script assets/database/03_cases_covid_example.sql
+- De ser necesario modificar parametros de conexión bd en assets/php/Class/Constants.php
+
 ## :bust_in_silhouette: Contactos
 - Twitter : https://twitter.com/juancho_2306
 
