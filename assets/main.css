@@ -1,46 +1,108 @@
-@font-face{
-    font-family: Nunito;
-    src: url(../../complementos/font/Nunito/Nunito-Regular.ttf);
-}
-
-@font-face{
-    font-family: roboto;
-    src: url(../../complementos/font/roboto/RobotoCondensed-Bold.ttf);
-}
 
 :root{
-    --altura-encabezado: 4rem;
-    --primer-color: #241394;
-    --segundo-color: #FFF3A6;
-    --tercer-color: #AAA2E4;
-    --cuarto-color: #948522;
-    --font-header: roboto, Arial, Helvetica, sans-serif;
-    --font-body: Nunito, Arial, Helvetica, sans-serif;
+    --app-height: 100%;
+    --header-height: 3.5rem;
+    --firts-color: #241394;
+    --second-color: #FFF3A6;
+    --third-color: #AAA2E4;
+    --fourth-color: #948522;
+    --leaflet-color-btn: #f4f4f4;
     --firts-color-bar: #9ADCFF;
     --second-color-bar: #FFFA4D;
     --third-color-bar: #FFB2A6;
+    --font-header: 'Roboto Condensed', Arial, Helvetica, sans-serif;
+    --font-body: 'Nunito', Arial, Helvetica, sans-serif;
 }
 
-html{
-    height: -webkit-fill-available;
+symbol path,
+symbol g path,
+symbol g g path,
+symbol g rect,
+symbol g polygon{
+    fill: var(--second-color);
 }
 
 body{
     font-size: 16px;
     width: 100vw;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
     height: 100vh;
     margin: 0;
-    background-color: whitesmoke;
+    background-color: var(--leaflet-color-btn);
 }
 
+@keyframes fade_in_data{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+main{
+    animation-duration: .7s;
+}
+
+header{
+    height: var(--header-height);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--firts-color);
+}
+
+header div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+header div a{
+    color: var(--second-color);
+    padding-left: .5rem;
+    font-size: 1.2rem;
+    text-decoration: none;
+    font-family: var(--font-header);
+    font-weight: 700;
+}
+
+header div svg{
+    width: 2rem;
+    height: 2rem;
+}
+
+#map{
+    height: calc(100vh - var(--header-height));
+}
+
+@keyframes fade_in_screen{
+    0% {height: 0vh;}
+    50% {height: 160vh;}
+    100% {height: 0vh;}
+}
+
+#screen{
+    background-color: var(--third-color-bar);
+    position: fixed;
+    z-index: 1200;
+    top: -280px;
+    left: 0;
+    width: 100vw;
+    height: 10vh;
+    transform: skewY(-10deg);
+    transition: all 0.45s;
+    animation-timing-function: linear;
+    animation-duration: 2s;
+}
+
+.hide{
+    display: none;
+}
+
+/*class wallpaper*/
 .wallpaper{
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     z-index: 1080;
     background-color: rgba(0, 0, 0, .5);
     display: flex;
@@ -49,23 +111,10 @@ body{
     justify-content: center;
 }
 
-.hide{
-    display: none;
-}
-
-main{
-    animation-duration: .7s;
-}
-
-@keyframes fade_in_data{
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
 /*max value z-index in css leaflet is 1000*/
+/*class sidebar*/
 .sidebar{
-    background-color: var(--primer-color);
-    color: var(--segundo-color);
+    background-color: var(--firts-color);
     width: 100vw;
     height: 100vh;
     position: fixed;
@@ -77,6 +126,33 @@ main{
     grid-template-rows: auto 1fr auto;
 }
 
+.sidebar section:first-child{
+    color: var(--second-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
+    font-family: var(--font-header);
+}
+
+.sidebar section:first-child a{
+    font-size: 2.5rem;
+    text-decoration: none;
+}
+
+.sidebar section:first-child div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.sidebar section:first-child div svg{
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: .5rem;
+}
+
 .sidebar section{
     width: 90%;
     margin-left: auto;
@@ -86,20 +162,6 @@ main{
     font-family: var(--font-body);
 }
 
-.header_response{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 1.2rem;
-    padding-top: .5rem;
-}
-
-.header_response a{
-    text-decoration: none;
-    font-size: 2.5rem;
-}
-
 .sidebar section:last-child{
     padding-bottom: 1rem;
     display: flex;
@@ -107,65 +169,124 @@ main{
 }
 
 .sidebar section:last-child button{
-    background-color: var(--segundo-color);
+    background-color: var(--second-color);
     font-size: 1rem;
     font-weight: 700;
     padding: .5rem;
     border-radius: .3rem;
-    color: var(--primer-color);
+    color: var(--firts-color);
 }
 
 .sidebar section:last-child button:hover{
-    background-color: var(--tercer-color);
-    color: var(--segundo-color);
+    background-color: var(--third-color);
+    color: var(--second-color);
+}
+/*end class sidebar*/
+
+/*class select control in leaflet*/
+.input_group{
+    background-color: var(--firts-color);
+    padding: .3rem;
+    border-radius: .3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
-#content_response{
-    overflow-y: scroll;
-    scrollbar-color: var(--segundo-color) var(--tercer-color);
+.input_group svg{
+    width: 1.2rem;
+    height: 1.2rem;
 }
 
-#simples_metrics{
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 150px) minmax(150px, 316px) minmax(200px, 600px);
-    grid-template-areas: "chart1 chart2 chart2"
-                        "chart1 chart2 chart2"
-                        "chart3 chart3 chart3"
-                        "chart4 chart4 chart4";
+.input_group select{
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: normal;
+    width: 10rem;
+    margin-left: .5rem;
 }
+/*end class select control in leaflet*/
 
-#simples_metrics > div:nth-child(1){
-    grid-area: chart1;
-}
-
-#simples_metrics > div:nth-child(2){
-    grid-area: chart2;
-}
-
-#simples_metrics > div:nth-child(3){
-    grid-area: chart3;
-}
-
-#simples_metrics > div:nth-child(4){
-    grid-area: chart4;
-}
-
-#simples_metrics div{
+/*class btn group leaflet control*/
+.btn-group-vertical{
     display: flex;
     flex-direction: column;
+    text-align: center;
     justify-content: center;
     align-items: center;
 }
 
-#simples_metrics div canvas{
-    max-width: 80%;
-    max-height: 100% !important;
+.btn_custom{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0;
+    background: var(--firts-color);
+    border: 1px solid var(--firts-color);
 }
 
+.btn_custom:hover{
+    background-color: var(--third-color);
+}
+
+.btn_custom:first-child{
+    border-radius: .3rem .3rem 0 0;
+}
+
+.btn_custom:last-child{
+    border-radius: 0 0 .3rem .3rem;
+}
+
+.btn_custom svg{
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.btn_custom:hover svg{
+    fill: var(--firts-color);
+}
+/*end class btn group leaflet control*/
+
+/*class legend leaflet*/
+.legend_container{
+    background-color: var(--leaflet-color-btn);
+    padding: .2rem;
+    border-radius: .5rem;
+}
+
+.legend_container h2{
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: var(--firts-color);
+}
+
+.symbols_container{
+    float: left;
+    margin-left: 50px;
+}
+
+.legend_circle{
+    border-radius: 50%;
+    border: 1px solid var(--firts-color);
+    background-color: var(--firts-color);
+    opacity: .4;
+    display: inline-block;
+}
+
+.legend_title{
+    position: absolute;
+    right: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--firts-color);
+    font-weight: bold;
+}
+/*end class legend leaflet*/
+
+/*class preloader wallpaper*/
 .preloader_wallpaper{
-    background-color: var(--segundo-color);
+    background-color: var(--leaflet-color-btn);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -179,17 +300,8 @@ main{
     margin: 0;
     font-size: 1.2rem;
     font-weight: normal;
-    color: var(--primer-color);
+    color: var(--firts-color);
     font-family: var(--font-body);
-}
-
-header{
-    height: var(--altura-encabezado);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--primer-color);
 }
 
 :root{
@@ -199,6 +311,18 @@ header{
     --left-icon: 1.12rem;
 }
 
+@keyframes rotate{
+    50%{
+        border-left-color: var(--fourth-color);
+    }
+    75%{
+        border-left-color: var(--firts-color);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
 .preloader_wallpaper label{
     position: relative;
     height: var(--label-preloader);
@@ -206,25 +330,36 @@ header{
     display: inline-block;
     border-radius: 50%;
     animation: rotate 1.2s linear infinite;
-    border: 2px solid var(--tercer-color);
+    border: 2px solid var(--third-color);
     opacity: .5;
-    border-left-color: var(--primer-color);
-}
-
-@keyframes rotate {
-    50%{
-        border-left-color: var(--cuarto-color);
-    }
-    75%{
-        border-left-color: var(--primer-color);
-    }
-    100%{
-        transform: rotate(360deg);
-    }
+    border-left-color: var(--firts-color);
 }
 
 .preloader_wallpaper label .check-icon{
     display: none;
+}
+
+@keyframes check-icon{
+    0%{
+        height: 0;
+        width: 0;
+        opacity: 1;
+    }
+    20%{
+        height: 0;
+        width: var(--width-icon);
+        opacity: 1;
+    }
+    40%{
+        height: var(--heigth-icon);
+        width: var(--width-icon);
+        opacity: 1;
+    }
+    100%{
+        height: var(--heigth-icon);
+        width: var(--width-icon);
+        opacity: 1;
+    }
 }
 
 .preloader_wallpaper.success label .check-icon:after{
@@ -233,12 +368,18 @@ header{
     top: 50%;
     left: var(--left-icon);
     transform: scaleX(-1) rotate(135deg);
-    border-top: 4px solid var(--primer-color);
-    border-right: 4px solid var(--primer-color);
+    border-top: 4px solid var(--firts-color);
+    border-right: 4px solid var(--firts-color);
     height: var(--heigth-icon);
     width: var(--width-icon);
     transform-origin: left top;
     animation: check-icon 0.8s ease;
+}
+
+@keyframes error-icon {
+    0%{font-size: .5rem;}
+    50%{font-size: 2.5rem;}
+    100%{font-size: .5rem;}
 }
 
 .preloader_wallpaper.error label .check-icon:after{
@@ -262,8 +403,27 @@ header{
     margin-bottom: .5rem;
 }
 
-.preloader_wallpaper.error label + h3{
+.preloader_wallpaper label + h3 span{
+    display: block;
+}
+
+.preloader_wallpaper label + h3 span::before{
+    content: "";
+}
+
+.preloader_wallpaper.success label + h3 span,
+.preloader_wallpaper.error label + h3 span{
+    display: none;
+}
+
+/*text result*/
+.preloader_wallpaper.success label + h3::after{
+    content: "Petición satisfactoria";
+}
+
+.preloader_wallpaper.error label + h3::after{
     color: red;
+    content: "Ocurrio un error al procesar la petición";
 }
 
 .preloader_wallpaper button{
@@ -271,17 +431,17 @@ header{
     border-radius: .3rem;
     font-size: 1rem;
     font-family: var(--font-body);
-    color: var(--segundo-color);
+    color: var(--second-color);
     font-weight: 700;
     display: none;
 }
 
 .preloader_wallpaper.success button{
-    background-color: var(--primer-color);
+    background-color: var(--firts-color);
 }
 
 .preloader_wallpaper.success button:hover{
-    background-color: var(--tercer-color);
+    background-color: var(--third-color);
 }
 
 .preloader_wallpaper.error button{
@@ -290,35 +450,6 @@ header{
 
 .preloader_wallpaper.error button:hover{
     background-color: #e57373;
-}
-
-@keyframes error-icon {
-    0%{font-size: .5rem;}
-    50%{font-size: 2.5rem;}
-    100%{font-size: .5rem;}
-}
-
-@keyframes check-icon {
-    0%{
-        height: 0;
-        width: 0;
-        opacity: 1;
-    }
-    20%{
-        height: 0;
-        width: var(--width-icon);
-        opacity: 1;
-    }
-    40%{
-        height: var(--heigth-icon);
-        width: var(--width-icon);
-        opacity: 1;
-    }
-    100%{
-        height: var(--heigth-icon);
-        width: var(--width-icon);
-        opacity: 1;
-    }
 }
 
 .preloader_wallpaper.stop_animation_preloader label .check-icon{
@@ -331,7 +462,7 @@ header{
 
 .preloader_wallpaper.stop_animation_preloader label{
     animation: none;
-    border-color: var(--primer-color);
+    border-color: var(--firts-color);
     opacity: .8;
     transition: border 0.5s ease-out;
 }
@@ -339,160 +470,9 @@ header{
 .preloader_wallpaper.error.stop_animation_preloader label{
     border-color: red;
 }
+/*end class preloader wallpaper*/
 
-header div{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-header div a{
-    color: var(--segundo-color);
-    padding-left: .5rem;
-    font-size: 1.2rem;
-    text-decoration: none;
-    font-family: var(--font-header);
-    font-weight: 700;
-}
-
-header div svg{
-    width: 2rem;
-    height: 2rem;
-}
-
-#coronavirus path{
-    fill: var(--segundo-color);
-}
-
-#map{
-    height: calc(100vh - var(--altura-encabezado));
-}
-
-div.texto_temporal{
-    width: 10rem;
-    height: 2rem;
-    background-color: var(--primer-color);
-    color: var(--segundo-color);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    border-radius: .4rem;
-}
-
-.input_group svg,
-div.texto_temporal svg{
-    height: 1.2rem;
-    width: 1.2rem;
-}
-
-div.texto_temporal h3{
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-#calendario g path{
-    fill: var(--segundo-color);
-}
-
-.input_group{
-    background-color: var(--primer-color);
-    padding: .3rem;
-    border-radius: .3rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-}
-
-.input_group select{
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-    font-weight: normal;
-    width: 10rem;
-    margin-left: .5rem;
-}
-
-.legend_container{
-    background-color: #f4f4f4;
-    padding: .2rem;
-    border-radius: .5rem;
-}
-
-.legend_container h2{
-    font-family: var(--font-body);
-    font-size: 1.2rem;
-    font-weight: normal;
-    color: var(--primer-color);
-}
-
-.symbols_container{
-    float: left;
-    margin-left: 50px;
-}
-
-.legend_circle{
-    border-radius: 50%;
-    border: 1px solid var(--primer-color);
-    background-color: var(--primer-color);
-    opacity: .4;
-    display: inline-block;
-}
-
-.legend_title{
-    position: absolute;
-    right: 8px;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    color: var(--primer-color);
-    font-weight: bold;
-}
-
-.btn-group-vertical{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn_custom{
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0;
-    background: var(--primer-color);
-    border: 1px solid var(--primer-color);
-}
-
-.btn_custom:hover{
-    background-color: var(--tercer-color);
-}
-
-.btn_custom:first-child{
-    border-radius: .3rem .3rem 0 0;
-}
-
-.btn_custom:last-child{
-    border-radius: 0 0 .3rem .3rem;
-}
-
-.btn_custom svg{
-    width: 1.2rem;
-    height: 1.2rem;
-}
-
-symbol path,
-symbol g path,
-symbol g g path,
-symbol g rect,
-symbol g polygon{
-    fill: var(--segundo-color);
-}
-
-.btn_custom:hover svg{
-    fill: var(--primer-color);
-}
-
+/*class popup leaflet*/
 .table_popup{
     font-size: 1rem;
     border-collapse: collapse;
@@ -500,8 +480,8 @@ symbol g polygon{
 }
 
 .table_popup caption{
-    background-color: var(--primer-color);
-    color: var(--segundo-color);
+    background-color: var(--firts-color);
+    color: var(--second-color);
     font-family: var(--font-header);
     font-size: 1.2rem;
     font-weight: 700;
@@ -519,6 +499,191 @@ symbol g polygon{
     border: 1px solid #ddd;
     font-family: var(--font-body);
 }
+/*end class popup leaflet*/
+
+/*class content response chart*/
+#content_response{
+    overflow-y: scroll;
+    scrollbar-color: var(--second-color) var(--third-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#content_response div{
+    border-radius: .5rem;
+    margin-left: .7rem;
+    margin-right: .7rem;
+    padding: .7rem;
+    background-color: var(--leaflet-color-btn);
+}
+
+#group_age{
+    width: 100%;
+    height: 300px;
+}
+
+#week_epi{
+    width: 100%;
+    height: 320px;
+}
+/*end class content response chart*/
+
+/*class content information sidebar*/
+.content_info{
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--second-color);
+    overflow-y: scroll;
+    scrollbar-color: var(--second-color) var(--third-color);
+}
+
+.content_info div{
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+.content_info a{
+    text-decoration: underline;
+    font-weight: 700;
+    color: var(--second-color);
+}
+
+.content_info p{
+    text-align: justify;
+}
+
+.content_info p:first-child{
+    margin-top: 0;
+}
+
+.content_info div ul{
+    list-style: none;
+    padding: 0px .8rem;
+}
+
+.content_info div ul li{
+    padding: .5rem;
+    text-align: justify;
+    font-size: 1rem;
+    font-family: var(--font-body);
+
+    border-top: .1rem solid var(--firts-color-bar);
+    border-bottom: .1rem solid var(--firts-color-bar);
+    border-left: .15rem solid var(--firts-color-bar);
+    border-right: .15rem solid var(--firts-color-bar);
+}
+
+.content_info div ul li:first-child{
+    border-top: .15rem solid var(--firts-color-bar);
+}
+
+.content_info div ul li:last-child{
+    border-bottom: .15rem solid var(--firts-color-bar);
+}
+
+.content_info footer svg{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.content_info footer a{
+    text-decoration: none;
+}
+
+.content_info footer{
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content_info footer div span{
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.content_info footer div a:first-child{
+    margin-right: .5rem;
+}
+
+/*end class content information sidebar*/
+
+/*class init preloader*/
+.init_preloader{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--leaflet-color-btn);
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.init_preloader .preloader_wallpaper{
+    background-color: inherit;
+}
+
+.init_preloader .preloader_wallpaper h3{
+    color: var(--firts-color);
+    font-size: 1.2rem;
+    font-family: var(--font-body);
+}
+
+/*end class init preloader*/
+
+@media (pointer: coarse){
+    .init_preloader{
+        height: 90vh;
+    }
+
+    body, 
+    .sidebar,
+    .wallpaper_preloader,
+    .wallpaper{
+        height: 100%;
+        height: calc(var(--app-height, 1vh) * 100);
+    }
+
+    #map{
+        height: calc(calc(var(--app-height, 1vh) * 100) - var(--header-height));
+    }
+
+    header div svg{
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+
+    /*class select control in leaflet*/
+    .input_group{
+        padding: .4rem;
+    }
+
+    .input_group select{
+        font-size: 1.2rem;
+    }
+
+    .input_group svg{
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    /*end class select control in leaflet*/
+
+    /*class btn group leaflet control*/
+    .btn_custom{
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .btn_custom svg{
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    /*end class btn group leaflet control*/
+}
 
 @media screen and (min-width: 900px){
     body{
@@ -527,80 +692,57 @@ symbol g polygon{
         margin-right: auto;
     }
 
-    .sidebar section{
-        max-width: 1000px;
+    header{
+        justify-content: start;
+        padding-left: 3rem;
     }
 
-    input.control_tiempo{
-        width: 30rem;
+    .sidebar,
+    #screen{
+        max-width: 25rem;
     }
 
     .table_popup tr:nth-child(even){
-        background-color: var(--segundo-color);
+        background-color: var(--second-color);
     }
+
+    
 }
 
 @media screen and (max-width: 900px){
+
+    .table_popup{
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 1.1rem;
+    }
+
+    .table_popup caption{
+        display: none;
+    }
+
     .table_popup tr th,
     .table_popup tr td{
         display: block;
+        padding-left: .7rem;
+        padding-right: .7rem;
     }
 
     .table_popup tr th{
-        background-color: var(--segundo-color);
+        text-align: left;
+        background-color: var(--second-color);
+        color: var(--firts-color);
     }
 
     .table_popup tr td{
         text-align: right;
+        color: var(--second-color);
     }
 
-    #simples_metrics{
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 300px 500px 300px minmax(200px, 600px);
-        grid-template-areas: "chart1 chart1"
-                        "chart2 chart2"
-                        "chart3 chart3"
-                        "chart4 chart4";
-    }
-
-    
-}
-
-@media screen and (min-width: 400px) and (max-width:900px){
-    header div{
-        width: 90%;
-    }
-    
-    header div a{
-        text-align: center;
-    }
-
-    input.control_tiempo{
-        width: 20rem;
-    }
 }
 
 @media screen and (max-width: 400px){
-    :root{
-        --altura-encabezado: 6rem;
-    }
-
-    header div{
-        width: 80%;
-    }
-
-    header div a{
-        text-align: center;
-    }
-
-    header div svg{
-        width: 7rem;
-        height: 7rem;
-    }
-
-    input.control_tiempo{
-        width: 10rem;
-    }
 
     .legend_container h2{
         font-size: .8rem;
@@ -608,11 +750,6 @@ symbol g polygon{
 
     .legend_title{
         font-size: .7rem;
-    }
-
-    .btn_custom{
-        width: 2.5rem;
-        height: 2.5rem;
     }
 
 }

@@ -4,12 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
     <title>Mapa covid</title>
-    <link rel="stylesheet" href="../complementos/leafletJS/leaflet_v1.7.1/leaflet.css">
-    <script src="../complementos/leafletJS/leaflet_v1.7.1/leaflet-src.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet"> 
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" 
+	integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" 
+	crossorigin="" />
+
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" 
+	integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" 
+	crossorigin=""></script>
     
     <script src="assets/Leaflet.Control.Custom.js"></script>
-    <script src="../complementos/chartjs/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
     <link rel="stylesheet" href="assets/main.css">
     <script src="assets/main.js"></script>
 </head>
@@ -77,18 +87,6 @@
                     C192.533,71.45,192.828,70.39,192.699,69.335z"/>
             </g>
         </symbol>
-        <symbol id="nasal_covid" x="0px" y="0px" viewBox="0 0 256 256">
-            <g>
-                <path d="M126.7,160.5l-17.6-22.9l11-8.4c3.7-2.8,4.4-8,1.6-11.7c-0.8-1-1.5-1.6-2.5-2.2L69.1,85.2c0,0-15.5-16.5-22.3-22.1
-                    C33,51.7,16.9,43.4,0,40.4V256h129.4l-27.8-26.9l17.5-11.6C137,203.9,140.4,178.4,126.7,160.5z M55.5,116
-                    c-5.1,3.9-12.3,2.9-16.2-2.2c-3.8-5-2.9-12.3,2.2-16.1c5-3.8,12.3-2.9,16.1,2.1C61.4,104.9,60.5,112.2,55.5,116z"/>
-                <polygon points="219.5,36 219.5,0.1 183.5,0.1 183.5,36 147.6,36 147.6,72 183.5,72 183.5,107.9 219.5,107.9 219.5,72 255.4,72 
-                    255.4,36 	"/>
-                <path d="M162.1,134.6c-0.4-1.1-1-2.1-1.8-3.1l-0.3-0.5l-0.1,0.1c-0.3-0.4-0.7-0.8-1-1.1c-5.5-5.5-14.5-5.5-20.1,0
-                    c-5.5,5.5-5.5,14.5,0,20.1c0.4,0.4,0.7,0.7,1.1,1l-0.1,0.1l0.5,0.3c1,0.7,2,1.3,3.1,1.8l18.3,10.4l93.6,93.6V236l-82.8-82.8
-                    L162.1,134.6z"/>
-            </g>
-        </symbol>
         <symbol id="info" x="0px" y="0px" viewBox="0 0 494.572 494.572">
             <path d="M257.063,0C127.136,0,21.808,105.33,21.808,235.266c0,41.012,10.535,79.541,28.973,113.104L3.825,464.586
 	        c-3.285,8.118-1.391,17.402,4.799,23.593c6.176,6.19,15.47,8.085,23.586,4.802l118.707-47.953
@@ -97,55 +95,181 @@
 	        S233.938,94.852,256.804,94.852z M298.616,356.496c0,10.6-8.592,19.191-19.191,19.191h-45.243c-10.6,0-19.19-8.591-19.19-19.191
 	        V198.312c11.939,8.077,26.345,12.797,41.813,12.797c15.467,0,29.872-4.721,41.813-12.797V356.496z"/>
         </symbol>
+        <symbol id="map_location" viewBox="0 0 321.883 321.88" x="0px" y="0px">
+            <path d="M160.941,0c-69.035,0-125,55.964-125,125.001c0,69.035,85.187,196.882,125,196.882c39.813,0,125-127.847,125-196.882
+            C285.941,55.964,229.977,0,160.941,0z M160.941,182.294c-36.341,0-65.801-29.46-65.801-65.802c0-36.34,29.46-65.801,65.801-65.801
+	        c36.341,0,65.801,29.461,65.801,65.801C226.742,152.834,197.282,182.294,160.941,182.294z"/>
+        </symbol>
+        <symbol id="twitter" x="0px" y="0px" viewBox="0 0 310 310">
+            <path id="XMLID_827_" d="M302.973,57.388c-4.87,2.16-9.877,3.983-14.993,5.463c6.057-6.85,10.675-14.91,13.494-23.73
+            c0.632-1.977-0.023-4.141-1.648-5.434c-1.623-1.294-3.878-1.449-5.665-0.39c-10.865,6.444-22.587,11.075-34.878,13.783
+            c-12.381-12.098-29.197-18.983-46.581-18.983c-36.695,0-66.549,29.853-66.549,66.547c0,2.89,0.183,5.764,0.545,8.598
+            C101.163,99.244,58.83,76.863,29.76,41.204c-1.036-1.271-2.632-1.956-4.266-1.825c-1.635,0.128-3.104,1.05-3.93,2.467
+            c-5.896,10.117-9.013,21.688-9.013,33.461c0,16.035,5.725,31.249,15.838,43.137c-3.075-1.065-6.059-2.396-8.907-3.977
+            c-1.529-0.851-3.395-0.838-4.914,0.033c-1.52,0.871-2.473,2.473-2.513,4.224c-0.007,0.295-0.007,0.59-0.007,0.889
+            c0,23.935,12.882,45.484,32.577,57.229c-1.692-0.169-3.383-0.414-5.063-0.735c-1.732-0.331-3.513,0.276-4.681,1.597
+            c-1.17,1.32-1.557,3.16-1.018,4.84c7.29,22.76,26.059,39.501,48.749,44.605c-18.819,11.787-40.34,17.961-62.932,17.961
+            c-4.714,0-9.455-0.277-14.095-0.826c-2.305-0.274-4.509,1.087-5.294,3.279c-0.785,2.193,0.047,4.638,2.008,5.895
+            c29.023,18.609,62.582,28.445,97.047,28.445c67.754,0,110.139-31.95,133.764-58.753c29.46-33.421,46.356-77.658,46.356-121.367
+            c0-1.826-0.028-3.67-0.084-5.508c11.623-8.757,21.63-19.355,29.773-31.536c1.237-1.85,1.103-4.295-0.33-5.998
+            C307.394,57.037,305.009,56.486,302.973,57.388z"/>
+        </symbol>
+        <symbol id="blogger" viewBox="0 0 24 24" x="0px" y="0px">
+            <path d="m8.69 8.793c-.121.145-.194.334-.194.539 0 .085.012.166.036.244l-.002-.006c.05.279.261.498.531.559l.005.001c.365.039.788.062 1.216.062.157 0 .312-.003.467-.009l-.022.001h1.34c.141-.023.267-.061.386-.111l-.011.004c.226-.159.371-.419.371-.712 0-.014 0-.028-.001-.042v.002c.001-.01.001-.023.001-.035 0-.293-.174-.546-.425-.66l-.005-.002c-.101-.067-.226-.107-.36-.107-.004 0-.008 0-.012 0h-1.339q-1.232 0-1.5.026c-.19.022-.357.11-.48.24zm3.323 5.032q-2.144 0-2.599.054c-.229.008-.441.077-.621.19l.005-.003c-.107.092-.19.209-.238.342l-.002.006c-.037.09-.059.195-.059.304 0 .034.002.067.006.1v-.004c.024.143.08.27.162.377l-.002-.002c.086.121.204.214.343.266l.005.002c.646.06 1.398.094 2.157.094.297 0 .592-.005.886-.016l-.043.001 2.572-.054.48-.054c.236-.128.4-.362.429-.637v-.004c.006-.037.01-.079.01-.122 0-.232-.108-.44-.277-.574l-.001-.001c-.174-.115-.387-.185-.616-.187h-.001q-.4-.026-2.599-.026zm11.949 7.021q.054-.483.054-9.163v-6.962q-.054-1.447-.107-1.929c-.036-.222-.112-.42-.219-.597l.004.007-.054-.214c-.506-.999-1.438-1.719-2.55-1.926l-.022-.003q-.32-.054-9.136-.054t-9.082.054c-.681.174-1.269.509-1.743.962l.001-.001c-.472.456-.819 1.037-.987 1.691l-.005.025c-.074.349-.117.75-.117 1.161 0 .119.004.236.011.353l-.001-.016v15.595c.011.542.05 1.062.115 1.573l-.008-.073c.108.437.283.82.517 1.161l-.008-.012c.247.351.55.644.898.873l.013.008c.345.235.748.419 1.179.53l.027.006c.456.057.995.095 1.541.104h.013 15.433c.542-.011 1.062-.05 1.573-.115l-.073.008c.749-.171 1.39-.558 1.873-1.09l.003-.003c.476-.518.789-1.193.856-1.938l.001-.013zm-4.554-9.968q.054.32.026 2.492c.003.124.005.271.005.418 0 .75-.051 1.488-.148 2.211l.009-.084c-.209.822-.62 1.529-1.179 2.09-.685.74-1.612 1.246-2.656 1.391l-.023.003q-.48.054-3.644.026t-3.537-.08c-.824-.173-1.541-.55-2.12-1.076l.004.003c-.625-.529-1.098-1.219-1.357-2.007l-.009-.031c-.114-.368-.182-.791-.187-1.23v-.003q-.026-.75-.026-3.322.054-3.108.107-3.43c.208-.784.569-1.466 1.051-2.042l-.007.008c.488-.57 1.11-1.011 1.818-1.276l.031-.01c.36-.168.778-.282 1.219-.319l.014-.001q.64-.054 2.357-.054 1.822.054 2.09.107c.859.29 1.594.749 2.198 1.341l-.001-.001c.808.772 1.317 1.851 1.34 3.05v.004c-.002.028-.003.06-.003.093 0 .187.03.367.086.535l-.003-.012c.064.136.166.245.291.318l.003.002c.105.075.234.124.373.134h.002l.64.054c.287.007.562.046.826.113l-.025-.006c.225.12.386.332.434.585l.001.005z"/>
+        </symbol>
     </svg>
-    <main>
+    <section id="init_preloader" class="init_preloader">
+        <div class="preloader_wallpaper">
+            <label>
+                <div class="check-icon"></div>
+            </label>
+            <h3><span>Espere un momento</span></h3>
+        </div>
+    </section>
+    <main class="hide">
         <header>
             <div>
                 <svg><use xlink:href="#coronavirus"/></svg>
                 <a id="header_link" data-month="3" data-min="0" data-max="0" href="#">
-                    Distribución geográfica de casos COVID-19 en el estado Zulia época 2020
+                    Mapa Zulia - COVID19
                 </a>
             </div>
         </header>
         <div id="map"></div>
     </main>
-    <aside class="sidebar">
+    <aside id="wallpaper" class="hide"></aside>
+    <aside id="screen"></aside>
+    <aside id="sidebar_popup" class="hide">
         <section>
-            <div id="header_response" class="header_response">
-                <div>
-                    <span>Consulta</span>
-                </div>
-                <a>&times;</a>
+            <div>
+                <aside>
+                    <svg><use xlink:href="#map_location"/></svg>
+                </aside>
+                <span>CONSULTA</span>
             </div>
+            <a class="close_popup" data-sidebar="sidebar_popup">&times;</a>
+        </section>
+        <section></section>
+        <section>
+            <section>
+                <button class="close_popup" data-sidebar="sidebar_popup">Cerrar</button>
+            </section>
+        </section>
+    </aside>
+    <aside id="sidebar_response" class="hide">
+        <section>
+            <div>
+                <aside>
+                    <svg><use xlink:href="#bar_chart"/></svg>
+                </aside>
+                <span>RESUMEN</span>
+            </div>
+            <a class="close_response" data-sidebar="sidebar_response">&times;</a>
         </section>
         <section id="content_response">
-            <div id="simples_metrics">
-                <div>
-                    <canvas id="chart_pie_sex"></canvas>
-                </div>
-                <div>
-                    <canvas id="group_age"></canvas>
-                </div>
-                <div>
-                    <canvas id="week_epi"></canvas>
-                </div>
-                <div>
-                    <canvas id="distribution_population"></canvas>
-                    <div id="table_content_bar"></div>
-                </div>
+            <div>
+                <canvas id="chart_pie_sex"></canvas>
             </div>
+            <div>
+                <canvas id="group_age"></canvas>
+            </div>
+            <div>
+                <canvas id="week_epi"></canvas>
+            </div>
+        </section>
+        <section>
+            <button class="close_response" data-sidebar="sidebar_response">Cerrar</button>
+        </section>
+    </aside>
+    <aside id="sidebar_information" class="hide">
+        <section>
+            <div>
+                <aside>
+                    <svg><use xlink:href="#info"/></svg>
+                </aside>
+                <span>Acerca del proyecto</span>
+            </div>
+            <a class="close_popup" data-sidebar="sidebar_information">&times;</a>
+        </section>
+        <section class="content_info">
+            <div>
+                <p>
+                Plantilla  de diseño web adaptable  (del ingles <i>responsive web design</i>) 
+                para crear aplicaciones de mapas web con 
+                <a href="https://leafletjs.com/" target="_blank">Leaflet</a>.
+                </p>
+                <p>
+                El  mapa de coronavirus que se presenta, muestra los casos parciales de los casos 
+                registrados en año 2020, basados en datos oficiales de las autoridades nacionales 
+                y estadales de Venezuela.
+                </p>
+                <p>
+                    Este mapa interactivo, tiene la intención de mostrar las potencialidades 
+                    del manejo de la información geográfica para dar una nueva perspectiva, 
+                    al manejo de la emergencia sanitaria ocurrida después 
+                    de la epidemia desatada en Wuhan, China, en Diciembre de 2019.
+                </p>
+                <p>
+                    Asimismo, se agrega algunas representaciones graficas de datos, 
+                    para dar contexto a la visualización. El principal problema de este 
+                    mapa (como muchos otros) es que solo vemos una salpicadura 
+                    en tonalidad <b>morada</b> en la pantalla, es necesario acercarse 
+                    para observar los detalles. Lo cual es perfecto para detectar 
+                    los primeros casos de trasmisión comunitaria. A medida que transcurra el 
+                    tiempo y avanza la propagación del virus, se debe de ajustar a 
+                    mapas de coropletas ó mapas de símbolos graduados ajustados a la población, 
+                    para obtener una medida de casos por número de habitantes.
+                </p>
+                <ul>
+                    <li>
+                        <abbr 
+                        title="Hypertext Preprocessor" 
+                        class="initialism">PHP</abbr>
+                        como lenguaje de programación Backend para servir 
+                        y gestionar peticiones en el servidor.
+                    </li>
+                    <li>Código fuente almacenado en el repositorio 
+                        <a href="https://github.com/juanfernandez2306/mapa_covid" target="_blank">Github</a>.
+                    </li>
+                    <li>
+                        Gráficos elaborados con <a href="https://www.chartjs.org/"
+                        target="_blank">&copy; ChartJS</a>.
+                    </li>
+                    <li>
+                        Tipografía CSS Roboto Condensed y Nunito de <a href="https://fonts.google.com/"
+                        target="_blank">&copy; Google fonts</a>.
+                    </li>
+                    <li>
+                        Botones personalizados con <a href="https://github.com/yigityuce/Leaflet.Control.Custom"
+                        target="_blank">Leaflet Control Custom</a>.
+                    </li>
+                </ul>
+            </div>
+            <footer>
+                <div>
+                    <span class="text-muted">&copy; 2022 Juan Fernandez</span>
+                </div>
+                <div>
+                    <a href="https://twitter.com/juancho_2306" target="_blank">
+                        <svg><use xlink:href="#twitter"/></svg>
+                    </a>
+                    <a href="http://juanfernandez2306.blogspot.com/" target="_blank">
+                        <svg><use xlink:href="#blogger"/></svg>
+                    </a>
+                </div>
+            </footer>
 
         </section>
         <section>
-            <button>Cerrar</button>
+            <button class="close_popup" data-sidebar="sidebar_information">Cerrar</button>
         </section>
     </aside>
-    <aside id="wallpaper_preloader" class="hide">
+    <aside id="response_preloader" class="hide">
         <div class="preloader_wallpaper">
             <label>
                 <div class="check-icon"></div>
             </label>
-            <h3>Espere un momento</h3>
+            <h3><span>Espere un momento</span></h3>
             <button id="restart_preloader">Continuar</button>
         </div>
     </aside>
