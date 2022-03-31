@@ -40,7 +40,7 @@ function create_control_select({map, layer, data_dpt, initial_coordinates, initi
 
         input_group.innerHTML = `
         <svg><use xlink:href="#calendario"/></svg>
-        <select id="select_month"></select>
+        <select id="select_month" data-currentValue="3"></select>
         `;
 
         var select = input_group.querySelector('select');
@@ -53,12 +53,12 @@ function create_control_select({map, layer, data_dpt, initial_coordinates, initi
         });
 
         select.addEventListener('change', (e) =>{
-            let element = e.target;
-            let value = element.value;
-            element.disabled = true;
+            let element_select = e.target;
+            let value_select = element_select.value;
+            element_select.disabled = true;
 
             var FormData_input = new FormData();
-            FormData_input.append('number_month', value);
+            FormData_input.append('number_month', value_select);
 
             selectElement('#response_preloader').classList.remove('hide');
             selectElement('#response_preloader').classList.add('wallpaper');
@@ -73,12 +73,16 @@ function create_control_select({map, layer, data_dpt, initial_coordinates, initi
                 layer.addTo(map);
                 legend.addTo(map);
                 map.setView(initial_coordinates, initial_zoom);
-                element.removeAttribute('disabled');
+                element_select.removeAttribute('disabled');
+                element_select.setAttribute('data-currentValue', value_select);
 
                 stop_animation_loader('success')
             })
             .catch((error) =>{
-                stop_animation_loader('error')
+                stop_animation_loader('error');
+                let currentValue =  element_select.getAttribute('data-currentValue');
+                element_select.value = currentValue;
+                element_select.removeAttribute('disabled');
                 console.log(error);
             })
 
