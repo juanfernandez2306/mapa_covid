@@ -9,11 +9,17 @@ de la epidemia del __coronavirus__, desatada en Wuhan, China, en Diciembre de 20
 
 ## :eye_speech_bubble: Overview
 
+### :computer: Web
+
 ![Img overview project](assets/img/overview.gif)
+
+### :iphone: Mobile
+
+<img src="./assets/img/overview_mobile.gif" width=280>
 
 ## Demo
 
-[Demo](http://jfcoordenadas.xyz/mapa_covid/)
+[Demo](https://mapacovid.jfcoordenadas.xyz/)
 
 ## :keyboard: Framework
 - [Leaflet JS](https://leafletjs.com/)
